@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    @vite(['resources/scss/main.scss'])
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500&display=swap" rel="stylesheet">
-    @vite(['resources/scss/main.scss'])
+    <title>Thêm mới loại thực phẩm</title>
 </head>
-
 <body>
     <nav class="navbar navbar-expand-lg bg-transparent mb-4">
         <div class="container">
@@ -48,32 +46,40 @@
             </div>
         </div>
     </nav>
-    <section class="p-7 slide-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 col-lg-8">
-                    <h1 class="display-3 mb-5 fw-bold">
-                        PHƯƠNG PHÁP QUẢN LÝ
-                        <span class="d-block">ĐƠN GIẢN - HIỆU QUẢ</span>
-                    </h1>
-                    <div>
-                        <p class="col-md-9 lh-lg fs-5 mb-5">
-                            Chào mừng bạn đến với trang chủ của chúng tôi! Chúng tôi cung cấp giải pháp quản lý
-                            nhà ăn tiện lợi và hiệu quả, giúp bạn tối ưu hóa doanh thu và nâng cao sự hài lòng của khách
-                            hàng.
-                        </p>
+    <section class="slide-section">
+        <div class="container border rounded border-secondary">
+            <div class="container text-center pt-2">
+                <h2>Thêm mới loại thực phẩm</h2>
+            </div>
+            <div class="container">
+                <form class="" method="POST" action="{{ route('foodtypes.store')}}">
+                    @csrf
+                    <div class="row justify-content-center mx-auto" style="width:80%">
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput" class="form-label">STT</label>
+                            <input type="text" readonly class="form-control" id="formGroupExampleInput" name="id" value="" placeholder="STT tự động tăng (không cần nhập)">
+                        </div>
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput2" class="form-label">Loại thực phẩm</label>
+                            <input type="text" class="form-control" id="formGroupExampleInput2" name="FoodTypeName" value="" placeholder="Nhập tên loại thực phẩm">
+                        </div>
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput" class="form-label">Mô tả</label>
+                            <input type="text" class="form-control" id="formGroupExampleInput" name="Description" value="" placeholder="Thêm mô tả về loại thực phẩm">
+                        </div>
+                    </div> 
+                    <div class="container d-flex justify-content-center align-items-center">
+                        <div class="text-center pb-2 mx-2">
+                            <a href="{{ route('foodtypes.index') }}" class="btn btn-primary" style="width:98.89px"> Quay lại</a>
+                        </div>
+                        <div class="text-center pb-2 mx-2">
+                            <button type=submit class="btn btn-primary">Thêm mới</button>
+                        </div>
                     </div>
-                    <div class="d-flex flex-column flex-lg-row gap-2">
-                        <a href="#" class="btn btn-primary btn-lg px-5 py-3 fw-bold" style="width:200px">Giới
-                            thiệu</a>
-                        <a href="#" class="btn btn-outline-primary btn-1 btn-lg px-5 py-3 fw-bold"
-                            style="width:200px">Liên hệ</a>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </section>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 </body>
-
 </html>
