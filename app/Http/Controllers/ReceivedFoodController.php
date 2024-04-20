@@ -14,8 +14,8 @@ class ReceivedFoodController extends Controller
      */
     public function index()
     {
+        $received_food = ReceivedFood::with('food_type')->get();
 
-        $received_food = ReceivedFood::all();
         $foodtypes = FoodType::all();
         $dates = ReceivedFood::distinct()->pluck('Date');
         return view('food.receivedfood.index', compact('received_food', 'foodtypes', 'dates'));
@@ -48,6 +48,7 @@ class ReceivedFoodController extends Controller
         return view('food.receivedfood.index', compact('received_food','dates','foodtypes'));
     }
 
+    
     public function filterReceivedFood(Request $request)
     {
         $query = ReceivedFood::query();
@@ -56,25 +57,28 @@ class ReceivedFoodController extends Controller
         
         if($request->ajax()){
             if(empty($request->foodtype) && empty($request->date)){
-                $received_food = $query->get();
+                $received_food = $query->with(['food_type', 'unit'])->get();
             }
             elseif(!empty($request->foodtype) && empty($request->date)){
-                $received_food = $query->where('FoodType_ID', $request->foodtype)->get();
+                $received_food = $query->with(['food_type', 'unit'])->where('FoodType_ID', $request->foodtype)->get();
             }
             elseif(empty($request->foodtype) && !empty($request->date)){
-                $received_food = $query->whereDate('Date', $request->date)->get();
+                $received_food = $query->with(['food_type', 'unit'])->whereDate('Date', $request->date)->get();
             }
             else{
-                $received_food = $query->where('FoodType_ID', $request->foodtype)
+                $received_food = $query->with(['food_type', 'unit'])
+                                        ->where('FoodType_ID', $request->foodtype)
                                         ->whereDate('Date', $request->date)
                                         ->get();
             }
             return response()->json(['received_food' => $received_food]);
         }
         
-        $received_food = $query->get();
+        $received_food = $query->with(['food_type', 'unit'])->get();
         return view('food.receivedfood.index', compact('foodtypes', 'received_food', 'dates'));
     }
+
+
     /**
      * Show the form for creating a new resource.
      */

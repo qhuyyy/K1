@@ -134,9 +134,9 @@
                                 html += '<tr>\
                                         <td>'+received_food[i]['id']+'</td>\
                                         <td>'+received_food[i]['Date']+'</td>\
-                                        <td>'+ received_food[i]['FoodType_ID'] +'</td>\
+                                        <td>'+ received_food[i]['food_type']['FoodTypeName'] +'</td>\
                                         <td>'+received_food[i]['FoodName']+'</td>\
-                                        <td>'+received_food[i]['Unit_ID']+'</td>\
+                                        <td>'+received_food[i]['unit']['UnitName']+'</td>\
                                         <td>'+received_food[i]['UnitPrice']+'</td>\
                                         <td>'+received_food[i]['Quantity']+'</td>\
                                         <td>'+received_food[i]['Total']+'</td>\
@@ -177,7 +177,7 @@
                     }
                 });
             }
-
+           
     // Gọi hàm filterReceivedFood() khi có thay đổi trong select box ngày hoặc select box loại thực phẩm
     $("#date, #foodtype").on('change', filterReceivedFood);
 });
