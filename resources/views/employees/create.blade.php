@@ -23,7 +23,7 @@
                             value="" placeholder="Nhập họ tên đầy đủ của nhân viên">
                     </div>
                     <div class="mb-3">
-                        <label for="formGroupExampleInput" class="form-label">Ngày Sinh</label>
+                        <label for="formGroupExampleInput" class="form-label">Ngày sinh</label>
                         <input type="date" class="form-control" id="formGroupExampleInput" name="DateOfBirth"
                             value="" placeholder="Nhập ngày tháng năm sinh">
                     </div>

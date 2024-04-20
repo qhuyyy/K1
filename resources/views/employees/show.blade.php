@@ -21,7 +21,7 @@
                                 name="Name" value="{{ $employee->Name }}">
                         </div>
                         <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-label">Ngày Sinh</label>
+                            <label for="formGroupExampleInput" class="form-label">Ngày sinh</label>
                             <input type="date" readonly class="form-control" id="formGroupExampleInput"
                                 name="DateOfBirth" value="{{ $employee->DateOfBirth }}">
                         </div>
