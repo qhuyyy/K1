@@ -8,41 +8,29 @@
     <div class="container">    
         <div class="row">
             <div class="col-md-3">
-                <div class="mb-3">
-                    <div class="form-group">
-                        <form method="get" action="/search">
-                            <div class="input-group">
-                                <div class="mb-3">
-                                    <label for="Date" class="form-label">Ngày</label>
-                                    <select class="form-select" id="Date" name="Date">
-                                        <option value="">- Chọn ngày -</option>
-                                        @foreach ($dates as $date)
-                                            <option value="{{ $date }}">{{ $date }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="foodtype" class="form-label">Loại thực phẩm</label>
-                                    <select class="form-select" id="foodtype" onchange="updateFoodTypeId()">
-                                        <option value="">- Chọn loại thực phẩm -</option>
-                                        @foreach ($foodtypes as $foodtype)
-                                            <option value="{{ $foodtype->id }}" data-foodtype-id="{{ $foodtype->id }}">{{ $foodtype->FoodTypeName }}</option>
-                                        @endforeach
-                                    </select>
-                                    <input type="hidden" id="foodtype_id" name="FoodType_ID">
-                                </div>
-                            </div>
-                            <div class="container d-flex justify-content-center align-items-center">
-                                <div class="text-center pb-2 mx-2">
-                                    <button type=submit class="btn btn-primary">Lọc</button>
-                                </div>
-                                <div class="text-center pb-2 mx-2">
-                                    <a href="{{ route('receivedfood.index') }}" class="btn btn-primary"> Quay lại</a>
-                                </div>
-                            </div>
-                        </form>
+                <form action="">
+                    <div class="text-center">
+                        <h2>Bộ lọc</h2>
                     </div>
-                </div>
+                    <div class="">
+                        <label for="formGroupExampleInput2" class="form-label">Loại thực phẩm</label>
+                        <select class="form-select" name="foodtype" id="foodtype">
+                            <option value="">Chọn loại thực phẩm</option>
+                            @foreach ($foodtypes as $foodtype)
+                                <option value="{{ $foodtype['id']}}">{{$foodtype->FoodTypeName}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="pt-2">
+                        <label for="formGroupExampleInput2" class="form-label">Ngày</label>
+                        <select class="form-select" name="date" id="date">
+                            <option value="">Chọn ngày</option>
+                            @foreach ($dates as $date)
+                                <option value="{{ $date }}">{{ $date }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </form>
             </div>
             <div class="col-md-9">
                 <div class="text-center pb-2">
@@ -59,11 +47,10 @@
                             <th scope="col">Đơn giá</th>
                             <th scope="col">Số lượng</th>
                             <th scope="col">Tổng tiền</th>
-                            <th scope="col">Ghi chú</th>
                             <th scope="col">Hành động</th>
                         </tr>
                     </thead>
-                    <tbody id="table-body">
+                    <tbody id="t-body">
                         @foreach ($received_food as $receivedfood)
                             <tr>
                                 <td>{{ $receivedfood->id }}</td>
@@ -74,7 +61,6 @@
                                 <td>{{ number_format($receivedfood->UnitPrice, 0, ',', '.') }}</td>
                                 <td>{{ $receivedfood->Quantity }}</td>
                                 <td>{{ number_format($receivedfood->Total, 0, ',', '.') }}</td>
-                                <td>{{ $receivedfood->Note }}</td>
                                 <td>
                                     <div class="mx-3">
                                         <a href="{{ route('receivedfood.show', $receivedfood->id) }}"><img
@@ -132,15 +118,68 @@
 
 @section('script')
     <script>
-        function updateFoodTypeId() {
-            console.log(document.getElementById("foodtype").value);
-            var select = document.getElementById("foodtype");
-            var foodTypeIdInput = document.getElementById("foodtype_id");
-            var selectedOption = select.options[select.selectedIndex];
-            var foodtypeID = selectedOption.getAttribute("data-foodtype-id");
-            foodTypeIdInput.value = foodtypeID;
+        $(document).ready(function(){
+            function filterReceivedFood() {
+                var date = $("#date").val();
+                var foodtype = $("#foodtype").val();
+                $.ajax({
+                    url:"{{ route('filter') }}",
+                    type: "GET",
+                    data: {'date': date, 'foodtype': foodtype},
+                    success:function(data){
+                        var received_food = data.received_food;
+                        var html = '';
+                        if (received_food.length > 0){
+                            for (let i = 0; i < received_food.length; i++) {
+                                html += '<tr>\
+                                        <td>'+received_food[i]['id']+'</td>\
+                                        <td>'+received_food[i]['Date']+'</td>\
+                                        <td>'+ received_food[i]['FoodType_ID'] +'</td>\
+                                        <td>'+received_food[i]['FoodName']+'</td>\
+                                        <td>'+received_food[i]['Unit_ID']+'</td>\
+                                        <td>'+received_food[i]['UnitPrice']+'</td>\
+                                        <td>'+received_food[i]['Quantity']+'</td>\
+                                        <td>'+received_food[i]['Total']+'</td>\
+                                        <td>\
+                                            <a href="/receivedfood/'+received_food[i]['id']+'"><img src="/images/ShowIcon.svg" alt="Show Icon"></a>\
+                                            <a href="/receivedfood/'+received_food[i]['id']+'/edit"><img src="/images/EditIcon.svg" alt="Edit Icon"></a>\
+                                            <a href="/receivedfood/'+received_food[i]['id']+'/destroy" data-bs-toggle="modal" data-bs-target="#'+received_food[i]['id']+'"><img src="/images/DeleteIcon.svg" alt="Delete Icon"></a>\
+                                            <div class="modal fade" id="'+ received_food[i]['id'] +'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">\
+                                                <div class="modal-dialog">\
+                                                    <div class="modal-content">\
+                                                        <div class="modal-header">\
+                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Xóa thông tin thực phẩm</h1>\
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>\
+                                                        </div>\
+                                                        <div class="modal-body">\
+                                                            Bạn có chắc chắn muốn xóa thực phẩm này không?\
+                                                        </div>\
+                                                        <div class="modal-footer">\
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>\
+                                                            <form method="POST" action="/receivedfood/'+received_food[i]['id']+'/destroy">\
+                                                                @csrf\
+                                                                @method('DELETE')\
+                                                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Xác nhận</button>\
+                                                            </form>\
+                                                        </div>\
+                                                    </div>\
+                                                </div>\
+                                            </div>\
+                                        </td>\
+                                    </tr>';
+                                        console.log(html)
+                            }   
+                        }
+                        else{
+                            html += 'Không tìm thấy thực phẩm nào';
+                        }
+                        $("#t-body").html(html);
+                    }
+                });
+            }
 
-        }
-
+    // Gọi hàm filterReceivedFood() khi có thay đổi trong select box ngày hoặc select box loại thực phẩm
+    $("#date, #foodtype").on('change', filterReceivedFood);
+});
     </script>
 @endsection

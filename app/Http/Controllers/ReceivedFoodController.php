@@ -48,21 +48,32 @@ class ReceivedFoodController extends Controller
         return view('food.receivedfood.index', compact('received_food','dates','foodtypes'));
     }
 
-    public function filter(Request $request)
+    public function filterReceivedFood(Request $request)
     {
-
-        $foodTypeId = $request->input('FoodType_ID');
-
-        $received_food = ReceivedFood::query();
-
-        // Áp dụng bộ lọc nếu có giá trị được chọn
-        if (!empty($foodType_ID)) {
-            $received_food->where('FoodType_ID', $foodType_ID);
+        $query = ReceivedFood::query();
+        $foodtypes = FoodType::all();
+        $dates = ReceivedFood::select('Date')->distinct()->pluck('Date');
+        
+        if($request->ajax()){
+            if(empty($request->foodtype) && empty($request->date)){
+                $received_food = $query->get();
+            }
+            elseif(!empty($request->foodtype) && empty($request->date)){
+                $received_food = $query->where('FoodType_ID', $request->foodtype)->get();
+            }
+            elseif(empty($request->foodtype) && !empty($request->date)){
+                $received_food = $query->whereDate('Date', $request->date)->get();
+            }
+            else{
+                $received_food = $query->where('FoodType_ID', $request->foodtype)
+                                        ->whereDate('Date', $request->date)
+                                        ->get();
+            }
+            return response()->json(['received_food' => $received_food]);
         }
-
-        $received_food = $received_food->get();
-
-        return view('food.receivedfood.index', compact('received_food'));
+        
+        $received_food = $query->get();
+        return view('food.receivedfood.index', compact('foodtypes', 'received_food', 'dates'));
     }
     /**
      * Show the form for creating a new resource.
