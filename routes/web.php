@@ -15,7 +15,6 @@ Route::resource('food',FoodController::class);
 Route::resource('foodtypes',FoodTypeController::class);
 
 Route::resource('receivedfood',ReceivedFoodController::class);
-Route::get('/search',[ReceivedFoodController::class,'search']);
 Route::get('/filter',[ReceivedFoodController::class,'filterReceivedFood'])->name('filter');
 
 Route::delete('/receivedfood/{id}/destroy', [ReceivedFoodController::class, 'destroy'])->name('receivedfood.destroy');

@@ -20,34 +20,6 @@ class ReceivedFoodController extends Controller
         $dates = ReceivedFood::distinct()->pluck('Date');
         return view('food.receivedfood.index', compact('received_food', 'foodtypes', 'dates'));
     }
-
-    public function search(Request $request)
-    {
-        // Lấy giá trị tìm kiếm từ request
-        $date = $request->input('Date');
-        $foodType_ID = $request->input('FoodType_ID');
-        $dates = ReceivedFood::distinct()->pluck('Date');
-        $foodtypes = FoodType::all();
-        // Tìm kiếm trong cơ sở dữ liệu
-        $received_food = ReceivedFood::query();
-
-        // Áp dụng điều kiện tìm kiếm theo ngày nếu có
-        if (!empty($date)) {
-            $received_food->where('Date', $date);
-        }
-
-        // Áp dụng điều kiện tìm kiếm theo loại thực phẩm nếu có
-        if (!empty($foodType_ID)) {
-            $received_food->where('FoodType_ID', $foodType_ID);
-        }
-
-        // Lấy kết quả của tìm kiếm
-        $received_food = $received_food->get();
-
-        // Trả về view và truyền kết quả tìm kiếm
-        return view('food.receivedfood.index', compact('received_food','dates','foodtypes'));
-    }
-
     
     public function filterReceivedFood(Request $request)
     {

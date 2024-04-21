@@ -6,7 +6,7 @@
 <section class="slide-section">
     <div class="container border rounded border-secondary">
         <div class="container text-center pt-2">
-            <h2>Chỉnh sửa thông tin nhân viên</h2>
+            <h2>Chỉnh sửa thông tin thực phẩm</h2>
         </div>
         <form method="POST" action="{{ route('receivedfood.update', $received_food) }}">
             @csrf
