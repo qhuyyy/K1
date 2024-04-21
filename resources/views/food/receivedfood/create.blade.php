@@ -13,19 +13,19 @@
                 @csrf
                 <div class="row justify-content-center mx-auto" style="width:80%">
                     <div class="mb-3">
-                        <label for="formGroupExampleInput2" class="form-label">Ngày</label>
-                        <input type="date" class="form-control" id="formGroupExampleInput2" name="Date" 
-                               value="<?php echo date('Y-m-d'); ?>" placeholder="Chọn ngày">
+                        <label for="formGroupExampleInput5" class="form-label">Ngày</label>
+                        <input type="date" class="form-control" id="formGroupExampleInput2" name="Date" placeholder="Chọn ngày" value="{{ request()->date ? request()->date : date('Y-m-d') }}">
                     </div>
                     <div class="mb-3">
                         <label for="foodtype" class="form-label">Loại thực phẩm</label>
-                        <select class="form-select" id="foodtype" onchange="updateFoodTypeId()">
+                        <select class="form-select" id="foodtype" name="foodtype">
                             <option value="">- Chọn loại thực phẩm -</option>
                             @foreach ($foodtypes as $foodtype)
-                                <option value="{{ $foodtype->id }}" data-foodtype-id="{{ $foodtype->id }}">{{ $foodtype->FoodTypeName }}</option>
+                                <option value="{{ $foodtype->id }}" data-foodtype-id="{{ $foodtype->id }}" {{ request()->foodtype == $foodtype->id ? 'selected' : '' }}>
+                                    {{ $foodtype->FoodTypeName }}
+                                </option>
                             @endforeach
                         </select>
-                        <input type="hidden" id="foodtype_id" name="FoodType_ID">
                     </div>
                     <div class="mb-3">
                         <label for="formGroupExampleInput" class="form-label">Tên thực phẩm</label>
@@ -102,5 +102,6 @@
         var totalPrice = unitPrice * quantity;
         document.getElementById("totalPrice").value = totalPrice;
     }
+
 </script>
 @endsection

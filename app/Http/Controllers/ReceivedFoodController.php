@@ -54,13 +54,25 @@ class ReceivedFoodController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($foodtype, $date)
     {
+        // Lấy danh sách các loại thực phẩm và đơn vị tính
         $foodtypes = FoodType::all();
         $units = Unit::all();
-        return view('food.receivedfood.create',compact('foodtypes','units'));
+        
+        // Trả về view 'create' với dữ liệu đã lấy được
+        return view('food.receivedfood.create', compact('foodtypes', 'units', 'foodtype', 'date'));
     }
 
+    public function createWithoutParams()
+    {
+        // Lấy danh sách các loại thực phẩm và đơn vị tính
+        $foodtypes = FoodType::all();
+        $units = Unit::all();
+        
+        // Trả về view 'create' với dữ liệu đã lấy được
+        return view('food.receivedfood.create', compact('foodtypes', 'units'));
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -68,7 +80,7 @@ class ReceivedFoodController extends Controller
     {
         $received_food = new ReceivedFood;
         $received_food->Date = $request->Date;
-        $received_food->FoodType_ID = $request->FoodType_ID;
+        $received_food->FoodType_ID = $request->foodtype;
         $received_food->FoodName = $request->FoodName;
         $received_food->Unit_ID = $request->Unit_ID;
         $received_food->UnitPrice = $request->UnitPrice;

@@ -20,3 +20,5 @@ Route::get('/filter',[ReceivedFoodController::class,'filterReceivedFood'])->name
 Route::delete('/receivedfood/{id}/destroy', [ReceivedFoodController::class, 'destroy'])->name('receivedfood.destroy');
 
 Route::get('/get-food-type-name/{foodTypeID}', [FoodTypeController::class, 'getFoodTypeName']);
+Route::get('receivedfood/create/{foodtype}/{date}', [ReceivedFoodController::class, 'create'])->name('receivedfood.create');
+Route::get('receivedfood/create', [ReceivedFoodController::class, 'createWithoutParams'])->name('receivedfood.createWithoutParams');

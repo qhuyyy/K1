@@ -6,12 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\FoodType;
 class FoodTypeController extends Controller
 {
-
-
-    public function getFoodTypeName($foodTypeID) {
-        $foodTypeName = FoodType::find($foodTypeID)->FoodTypeName;
-        return response()->json(['foodTypeName' => $foodTypeName]);
-    }
     /**
      * Display a listing of the resource.
      */
