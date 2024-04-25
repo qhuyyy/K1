@@ -68,14 +68,14 @@
 @endsection
 
 @section('script')
-<script>
-    function updatePositionId() {
-        var select = document.getElementById("position");
-        var positionIdInput = document.getElementById("position_id");
-        var selectedOption = select.options[select.selectedIndex];
-        var positionId = selectedOption.getAttribute("data-position-id");
-        positionIdInput.value = positionId;
-    }
-</script>
+    <script>
+        function updatePositionId() {
+            var select = document.getElementById("position");
+            var positionIdInput = document.getElementById("position_id");
+            var selectedOption = select.options[select.selectedIndex];
+            var positionId = selectedOption.getAttribute("data-position-id");
+            positionIdInput.value = positionId;
+        }
+    </script>
 @endsection
     

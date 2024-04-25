@@ -46,6 +46,7 @@
                         <th scope="col">Đơn giá</th>
                         <th scope="col">Số lượng</th>
                         <th scope="col">Tổng tiền</th>
+                        <th scope="col">Ghi chú</th>
                         <th scope="col">Hành động</th>
                     </tr>
                 </thead>
@@ -60,6 +61,7 @@
                             <td>{{ number_format($receivedfood->UnitPrice, 0, ',', '.') }}</td>
                             <td>{{ $receivedfood->Quantity }}</td>
                             <td>{{ number_format($receivedfood->Total, 0, ',', '.') }}</td>
+                            <td>{{ $receivedfood->Note }}</td>
                             <td>
                                 <div class="mx-3">
                                     <a href="{{ route('receivedfood.show', $receivedfood->id) }}"><img
@@ -71,40 +73,41 @@
                                         <img src="{{ URL('images/DeleteIcon.svg') }}" alt="Delete Icon">
                                     </a>
                                 </div>
-                                <div class="modal fade" id="{{ $receivedfood->id }}" tabindex="-1"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Xóa thông tin thực phẩm
-                                                </h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Bạn có chắc chắn muốn xóa thực phẩm này không?
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Hủy</button>
-                                                <form method="POST"
-                                                    action="{{ route('receivedfood.destroy', $receivedfood->id) }}">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-primary"
-                                                        data-bs-dismiss="modal">Xác
-                                                        nhận</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </td>
                         </tr>
+                        <div class="modal fade" id="{{ $receivedfood->id }}" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Xóa thông tin thực phẩm
+                                        </h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Bạn có chắc chắn muốn xóa thực phẩm này không?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Hủy</button>
+                                        <form method="POST"
+                                            action="{{ route('receivedfood.destroy', $receivedfood->id) }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-primary"
+                                                data-bs-dismiss="modal">Xác
+                                                nhận</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     @endforeach
                 </tbody>
             </table>
             <div class="container text-center pt-2">
+                <a href="{{ route('foodtypes.index') }}" class="btn btn-primary">Quản lý loại thực phẩm</a>
                 <a href="#" id="add-food-link" class="btn btn-primary">Thêm mới thực phẩm</a>
             </div>
         </div>
@@ -118,7 +121,7 @@
                 var date = $("#date").val();
                 var foodtype = $("#foodtype").val();
                 $.ajax({
-                    url: "{{ route('filter') }}",
+                    url: "{{ route('filter.received_foods') }}",
                     type: "GET",
                     data: {
                         'date': date,
@@ -138,37 +141,14 @@
                                             <td>' + received_food[i]['UnitPrice'] + '</td>\
                                             <td>' + received_food[i]['Quantity'] + '</td>\
                                             <td>' + received_food[i]['Total'] + '</td>\
+                                            <td>' + (received_food[i]['Note'] !== null ? received_food[i]['Note'] : '') + '</td>\
                                             <td>\
                                                 <a href="/receivedfood/' + received_food[i]['id'] + '"><img src="/images/ShowIcon.svg" alt="Show Icon"></a>\
                                                 <a href="/receivedfood/' + received_food[i]['id'] + '/edit"><img src="/images/EditIcon.svg" alt="Edit Icon"></a>\
-                                                <a href="/receivedfood/' + received_food[i]['id'] +
-                                    '/destroy" data-bs-toggle="modal" data-bs-target="#' +
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#' +
                                     received_food[i]['id'] + '"><img src="/images/DeleteIcon.svg" alt="Delete Icon"></a>\
-                                                <div class="modal fade" id="' + received_food[i]['id'] + '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">\
-                                                    <div class="modal-dialog">\
-                                                        <div class="modal-content">\
-                                                            <div class="modal-header">\
-                                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Xóa thông tin thực phẩm</h1>\
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>\
-                                                            </div>\
-                                                            <div class="modal-body">\
-                                                                Bạn có chắc chắn muốn xóa thực phẩm này không?\
-                                                            </div>\
-                                                            <div class="modal-footer">\
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>\
-                                                                <form method="POST" action="/receivedfood/' +
-                                    received_food[i]['id'] + '/destroy">\
-                                                                    @csrf\
-                                                                    @method('DELETE')\
-                                                                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Xác nhận</button>\
-                                                                </form>\
-                                                            </div>\
-                                                        </div>\
-                                                    </div>\
-                                                </div>\
                                             </td>\
                                         </tr>';
-                                console.log(html)
                             }
                         } else {
                             html += 'Không tìm thấy thực phẩm nào';
