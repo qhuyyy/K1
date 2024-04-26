@@ -21,7 +21,7 @@
                             name="Name" value="{{ $ingredient->IngredientName }}">
                     </div>
                 <div class="text-center pb-2">
-                    <a href="{{ route('ingredients.index') }}" class="btn btn-primary"> Quay lại</a>
+                    <a href="{{ route('ingredients.index') }}" class="btn btn-warning"> Quay lại</a>
                 </div>        
             </div>
         </div>

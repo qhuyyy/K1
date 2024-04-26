@@ -25,10 +25,10 @@
                     </div>
                     <div class="container d-flex justify-content-center align-items-center">
                         <div class="text-center pb-2 mx-2">
-                            <button type="button" onclick="goBack()" class="btn btn-primary">Quay lại</button>
+                            <button type="button" onclick="goBack()" class="btn btn-warning">Quay lại</button>
                         </div>
                         <div class="text-center pb-2 mx-2">
-                            <button type=submit class="btn btn-primary">Thêm mới</button>
+                            <button type=submit class="btn btn-warning">Thêm mới</button>
                         </div>
                     </div>
                 </form>

@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 <div class="text-center pb-2">
-                    <a href="{{ route('dishes.index') }}" class="btn btn-primary"> Quay lại</a>
+                    <a href="{{ route('dishes.index') }}" class="btn btn-warning"> Quay lại</a>
                 </div>    
             </div>
         </div>

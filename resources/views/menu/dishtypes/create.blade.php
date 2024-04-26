@@ -23,10 +23,10 @@
                 </div> 
                 <div class="container d-flex justify-content-center align-items-center">
                     <div class="text-center pb-2 mx-2">
-                        <a href="{{ route('dishtypes.index') }}" class="btn btn-primary" style="width:98.89px"> Quay lại</a>
+                        <a href="{{ route('dishtypes.index') }}" class="btn btn-warning" style="width:98.89px"> Quay lại</a>
                     </div>
                     <div class="text-center pb-2 mx-2">
-                        <button type=submit class="btn btn-primary">Thêm mới</button>
+                        <button type=submit class="btn btn-warning">Thêm mới</button>
                     </div>
                 </div>
             </form>

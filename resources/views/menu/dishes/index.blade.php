@@ -86,8 +86,8 @@
                 </tbody>
             </table>
             <div class="container text-center pt-2">
-                <a href="{{ route('dishtypes.index') }}" class="btn btn-primary">Quản lý loại món ăn</a>
-                <a href="#" id="add-dish-link" class="btn btn-primary">Thêm mới món ăn</a>
+                <a href="{{ route('dishtypes.index') }}" class="btn btn-warning">Quản lý loại món ăn</a>
+                <a href="#" id="add-dish-link" class="btn btn-warning">Thêm mới món ăn</a>
             </div>
         </div>
     </section>

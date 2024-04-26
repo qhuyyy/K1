@@ -19,7 +19,7 @@
                     </p>
                 </div>
                 <div class="d-flex flex-column flex-lg-row gap-2">
-                    <a href="#" class="btn btn-primary btn-lg px-5 py-3 fw-bold" style="width:200px">Giới
+                    <a href="#" class="btn btn-warning btn-lg px-5 py-3 fw-bold" style="width:200px">Giới
                         thiệu</a>
                     <a href="#" class="btn btn-outline-primary btn-1 btn-lg px-5 py-3 fw-bold"
                         style="width:200px">Liên hệ</a>

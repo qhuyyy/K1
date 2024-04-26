@@ -95,10 +95,10 @@
                 </div>
                 <div class="container d-flex justify-content-center align-items-center pt-2">
                     <div class="text-center pb-2 mx-2">
-                        <a href="{{ route('dishes.index') }}" class="btn btn-primary" style="width:98.89px"> Quay lại</a>
+                        <a href="{{ route('dishes.index') }}" class="btn btn-warning" style="width:98.89px"> Quay lại</a>
                     </div>
                     <div class="text-center pb-2 mx-2">
-                        <button type=submit class="btn btn-primary">Cập nhật</button>
+                        <button type=submit class="btn btn-warning">Cập nhật</button>
                     </div>
                 </div>
             </form>

@@ -16,7 +16,7 @@
         <nav class="navbar navbar-expand-lg bg-transparent mb-4">
             <div class="container">
                 <a class="navbar-brand" href="/">
-                    <img src="{{ URL('images/PrimaryLogo.svg') }}" alt="Logo K1" width="288px" height="50px" />
+                    <img src="{{ URL('images/PrimaryLogo2.svg') }}" alt="Logo K1" width="288px" height="50px" />
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                     aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,7 @@
                                 <li><a class="dropdown-item" href="{{ route('dishes.index') }}">Quản lý thực đơn</a></li>
                             </ul>
                         </li>
-                        <a class="btn btn-primary d-flex align-items-center gap-2">
+                        <a class="btn btn-warning d-flex align-items-center gap-2">
                             <img src="{{ URL('images/LoginIcon.svg') }}" alt="Logo Login" width="18.75px"
                                 height="18.75px" />
                             <span>Người dùng</span>

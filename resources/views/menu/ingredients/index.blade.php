@@ -1,6 +1,6 @@
 @extends('base')
 
-@section('title','Thêm nguyên liệu mới')
+@section('title','Danh sách nguyên liệu')
     
 @section('main')
     <section class="slide-section pt-3">
@@ -68,9 +68,9 @@
                 </tbody>
             </table>
         </div>
-        <div class="container text-center pt-2">
-            <a href="{{ route('dishes.index')}}" class="btn btn-primary">Quản lý món ăn</a>
-            <a href="{{route('ingredients.create')}}" class="btn btn-primary">Thêm mới nguyên liệu</a>
+        <div class="container text-center pt-2 pb-2">
+            <a href="{{ route('dishes.index')}}" class="btn btn-warning">Quản lý món ăn</a>
+            <a href="{{route('ingredients.create')}}" class="btn btn-warning">Thêm mới nguyên liệu</a>
         </div>
     </section>
     
