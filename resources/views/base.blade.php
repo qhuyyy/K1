@@ -34,7 +34,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="#">Quản lý bán hàng</a></li>
-                                <li><a class="dropdown-item" href="{{ route('receivedfood.index') }}">Quản lý nhập hàng</a></li>
+                                <li><a class="dropdown-item" href="{{ route('importedfood.index') }}">Quản lý nhập hàng</a></li>
                                 <li><a class="dropdown-item" href="{{ route('employees.index') }}">Quản lý nhân viên</a></li>
                                 <li><a class="dropdown-item" href="{{ route('dishes.index') }}">Quản lý thực đơn</a></li>
                             </ul>

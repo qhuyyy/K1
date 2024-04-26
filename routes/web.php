@@ -3,10 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FoodTypeController;
-use App\Http\Controllers\ReceivedFoodController;
+use App\Http\Controllers\ImportedFoodController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\DishController;
 use App\Http\Controllers\DishTypeController;
+
 
 Route::get('/', function () {
     return view('home');
@@ -15,14 +16,10 @@ Route::resource('employees',EmployeeController::class);
 
 Route::resource('foodtypes',FoodTypeController::class);
 
-Route::resource('receivedfood',ReceivedFoodController::class);
-Route::get('/filter-received-foods', [ReceivedFoodController::class, 'filterReceivedFood'])->name('filter.received_foods');
-
-Route::delete('/receivedfood/{id}/destroy', [ReceivedFoodController::class, 'destroy'])->name('receivedfood.destroy');
-
-Route::get('/get-food-type-name/{foodTypeID}', [FoodTypeController::class, 'getFoodTypeName']);
-Route::get('receivedfood/create/{foodtype}/{date}', [ReceivedFoodController::class, 'create'])->name('receivedfood.create');
-Route::get('receivedfood/create', [ReceivedFoodController::class, 'createWithoutParams'])->name('receivedfood.createWithoutParams');
+Route::resource('importedfood',ImportedFoodController::class);
+Route::get('/filter-imported-food', [ImportedFoodController::class, 'filterImportedFood'])->name('filter.imported_food');
+Route::get('importedfood/create/{foodtype}/{date}', [ImportedFoodController::class, 'create'])->name('importedfood.create');
+Route::get('importedfood/create', [ImportedFoodController::class, 'createWithoutParams'])->name('importedfood.createWithoutParams');
 
 Route::resource('ingredients',IngredientController::class);
 

@@ -51,31 +51,31 @@
                     </tr>
                 </thead>
                 <tbody id="t-body">
-                    @foreach ($received_food as $receivedfood)
+                    @foreach ($imported_food as $importedfood)
                         <tr>
-                            <td>{{ $receivedfood->id }}</td>
-                            <td>{{ date('d-m-Y', strtotime($receivedfood->Date)) }}</td>
-                            <td>{{ $receivedfood->food_type->FoodTypeName }}</td>
-                            <td>{{ $receivedfood->FoodName }}</td>
-                            <td>{{ $receivedfood->unit->UnitName }}</td>
-                            <td>{{ number_format($receivedfood->UnitPrice, 0, ',', '.') }}</td>
-                            <td>{{ $receivedfood->Quantity }}</td>
-                            <td>{{ number_format($receivedfood->Total, 0, ',', '.') }}</td>
-                            <td>{{ $receivedfood->Note }}</td>
+                            <td>{{ $importedfood->id }}</td>
+                            <td>{{ date('d-m-Y', strtotime($importedfood->Date)) }}</td>
+                            <td>{{ $importedfood->food_type->FoodTypeName }}</td>
+                            <td>{{ $importedfood->FoodName }}</td>
+                            <td>{{ $importedfood->unit->UnitName }}</td>
+                            <td>{{ number_format($importedfood->UnitPrice, 0, ',', '.') }}</td>
+                            <td>{{ $importedfood->Quantity }}</td>
+                            <td>{{ number_format($importedfood->Total, 0, ',', '.') }}</td>
+                            <td>{{ $importedfood->Note }}</td>
                             <td>
                                 <div class="mx-3">
-                                    <a href="{{ route('receivedfood.show', $receivedfood->id) }}"><img
+                                    <a href="{{ route('importedfood.show', $importedfood->id) }}"><img
                                             src="{{ URL('images/ShowIcon.svg') }}" alt="Show Icon"></a>
-                                    <a href="{{ route('receivedfood.edit', $receivedfood->id) }}"><img
+                                    <a href="{{ route('importedfood.edit', $importedfood->id) }}"><img
                                             src="{{ URL('images/EditIcon.svg') }}" alt="Edit Icon"></a>
-                                    <a href="{{ route('receivedfood.destroy', $receivedfood->id) }}" data-bs-toggle="modal"
-                                        data-bs-target="#{{ $receivedfood->id }}">
+                                    <a href="{{ route('importedfood.destroy', $importedfood->id) }}" data-bs-toggle="modal"
+                                        data-bs-target="#{{ $importedfood->id }}">
                                         <img src="{{ URL('images/DeleteIcon.svg') }}" alt="Delete Icon">
                                     </a>
                                 </div>
                             </td>
                         </tr>
-                        <div class="modal fade" id="{{ $receivedfood->id }}" tabindex="-1"
+                        <div class="modal fade" id="{{ $importedfood->id }}" tabindex="-1"
                             aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -92,7 +92,7 @@
                                         <button type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Hủy</button>
                                         <form method="POST"
-                                            action="{{ route('receivedfood.destroy', $receivedfood->id) }}">
+                                            action="{{ route('importedfood.destroy', $importedfood->id) }}">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-primary"
@@ -107,8 +107,8 @@
                 </tbody>
             </table>
             <div class="container text-center pt-2">
-                <a href="{{ route('foodtypes.index') }}" class="btn btn-primary">Quản lý loại thực phẩm</a>
-                <a href="#" id="add-food-link" class="btn btn-primary">Thêm mới thực phẩm</a>
+                <a href="{{ route('foodtypes.index') }}" class="btn btn-warning">Quản lý loại thực phẩm</a>
+                <a href="#" id="add-food-link" class="btn btn-warning">Thêm mới thực phẩm</a>
             </div>
         </div>
     </section>
@@ -117,36 +117,36 @@
 @section('script')
     <script>
         $(document).ready(function() {
-            function filterReceivedFood() {
+            function filterImportedFood() {
                 var date = $("#date").val();
                 var foodtype = $("#foodtype").val();
                 $.ajax({
-                    url: "{{ route('filter.received_foods') }}",
+                    url: "{{ route('filter.imported_food') }}",
                     type: "GET",
                     data: {
                         'date': date,
                         'foodtype': foodtype
                     },
                     success: function(data) {
-                        var received_food = data.received_food;
+                        var imported_food = data.imported_food;
                         var html = '';
-                        if (received_food.length > 0) {
-                            for (let i = 0; i < received_food.length; i++) {
+                        if (imported_food.length > 0) {
+                            for (let i = 0; i < imported_food.length; i++) {
                                 html += '<tr>\
-                                            <td>' + received_food[i]['id'] + '</td>\
-                                            <td>' + received_food[i]['Date'] + '</td>\
-                                            <td>' + received_food[i]['food_type']['FoodTypeName'] + '</td>\
-                                            <td>' + received_food[i]['FoodName'] + '</td>\
-                                            <td>' + received_food[i]['unit']['UnitName'] + '</td>\
-                                            <td>' + received_food[i]['UnitPrice'] + '</td>\
-                                            <td>' + received_food[i]['Quantity'] + '</td>\
-                                            <td>' + received_food[i]['Total'] + '</td>\
-                                            <td>' + (received_food[i]['Note'] !== null ? received_food[i]['Note'] : '') + '</td>\
+                                            <td>' + imported_food[i]['id'] + '</td>\
+                                            <td>' + imported_food[i]['Date'] + '</td>\
+                                            <td>' + imported_food[i]['food_type']['FoodTypeName'] + '</td>\
+                                            <td>' + imported_food[i]['FoodName'] + '</td>\
+                                            <td>' + imported_food[i]['unit']['UnitName'] + '</td>\
+                                            <td>' + imported_food[i]['UnitPrice'] + '</td>\
+                                            <td>' + imported_food[i]['Quantity'] + '</td>\
+                                            <td>' + imported_food[i]['Total'] + '</td>\
+                                            <td>' + (imported_food[i]['Note'] !== null ? imported_food[i]['Note'] : '') + '</td>\
                                             <td>\
-                                                <a href="/receivedfood/' + received_food[i]['id'] + '"><img src="/images/ShowIcon.svg" alt="Show Icon"></a>\
-                                                <a href="/receivedfood/' + received_food[i]['id'] + '/edit"><img src="/images/EditIcon.svg" alt="Edit Icon"></a>\
+                                                <a href="/importedfood/' + imported_food[i]['id'] + '"><img src="/images/ShowIcon.svg" alt="Show Icon"></a>\
+                                                <a href="/importedfood/' + imported_food[i]['id'] + '/edit"><img src="/images/EditIcon.svg" alt="Edit Icon"></a>\
                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#' +
-                                    received_food[i]['id'] + '"><img src="/images/DeleteIcon.svg" alt="Delete Icon"></a>\
+                                                imported_food[i]['id'] + '"><img src="/images/DeleteIcon.svg" alt="Delete Icon"></a>\
                                             </td>\
                                         </tr>';
                             }
@@ -162,7 +162,7 @@
                 var date = document.getElementById('date').value;
                 
                 if (!foodtype && !date) {
-                    window.location.href = "{{ route('receivedfood.createWithoutParams') }}";
+                    window.location.href = "{{ route('importedfood.createWithoutParams') }}";
                 }
                 else if (!date) {
                     alert('Vui lòng chọn ngày trước khi thêm mới.');
@@ -171,14 +171,14 @@
                     alert('Vui lòng chọn loại thực phẩm trước khi thêm mới.');
                 } 
                 else {
-                    var url = "{{ route('receivedfood.create', ['foodtype' => ':foodtype', 'date' => ':date']) }}";
+                    var url = "{{ route('importedfood.create', ['foodtype' => ':foodtype', 'date' => ':date']) }}";
                     url = url.replace(':foodtype', foodtype);
                     url = url.replace(':date', date);
                     window.location.href = url;
                 }
             });
 
-            $("#date, #foodtype").on('change', filterReceivedFood);
+            $("#date, #foodtype").on('change', filterImportedFood);
         });
     </script>
 @endsection

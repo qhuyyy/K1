@@ -9,7 +9,7 @@
             <h2>Thêm mới thực phẩm</h2>
         </div>
         <div class="container">
-            <form class="" method="POST" action="{{ route('receivedfood.store') }}">
+            <form class="" method="POST" action="{{ route('importedfood.store') }}">
                 @csrf
                 <div class="row justify-content-center mx-auto" style="width:80%">
                     <div class="mb-3">
@@ -67,11 +67,11 @@
                 </div>
                 <div class="container d-flex justify-content-center align-items-center">
                     <div class="text-center pb-2 mx-2">
-                        <a href="{{ route('receivedfood.index') }}" class="btn btn-primary" style="width:98.89px">
+                        <a href="{{ route('importedfood.index') }}" class="btn btn-warning" style="width:98.89px">
                             Quay lại</a>
                     </div>
                     <div class="text-center pb-2 mx-2">
-                        <button type=submit class="btn btn-primary">Thêm mới</button>
+                        <button type=submit class="btn btn-warning">Thêm mới</button>
                     </div>
                 </div>
             </form>
