@@ -25,31 +25,15 @@
                         <input type="text" readonly class="form-control" id="formGroupExampleInput2"
                             value="{{ $dish->dish_type->DishTypeName }}">
                     </div>
-                    <div class="mb-3">
-                        <label for="formGroupExampleInput2" class="form-label">Nguyên liệu 1</label>
-                        <input type="text" readonly class="form-control" id="formGroupExampleInput2"
-                            value="{{ $dish->ingredient1->IngredientName ?? '' }}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="formGroupExampleInput2" class="form-label">Nguyên liệu 2</label>
-                        <input type="text" readonly class="form-control" id="formGroupExampleInput2"
-                            value="{{ $dish->ingredient2->IngredientName ?? '' }}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="formGroupExampleInput2" class="form-label">Nguyên liệu 3</label>
-                        <input type="text" readonly class="form-control" id="formGroupExampleInput2"
-                            value="{{ $dish->ingredient3->IngredientName ?? '' }}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="formGroupExampleInput2" class="form-label">Nguyên liệu 4</label>
-                        <input type="text" readonly class="form-control" id="formGroupExampleInput2"
-                            value="{{ $dish->ingredient4->IngredientName ?? '' }}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="formGroupExampleInput2" class="form-label">Nguyên liệu 5</label>
-                        <input type="text" readonly class="form-control" id="formGroupExampleInput2"
-                            value="{{ $dish->ingredient5->IngredientName ?? '' }}">
-                    </div>
+                    @for ($i = 1; $i <= 5; $i++)
+                        @if ($dish->{"ingredient$i"} !== null)
+                            <div class="mb-3">
+                                <label for="formGroupExampleInput2" class="form-label">Nguyên liệu {{ $i }}</label>
+                                <input type="text" readonly class="form-control" id="formGroupExampleInput2"
+                                    value="{{ $dish->{"ingredient$i"}->IngredientName }}">
+                            </div>
+                        @endif
+                    @endfor
                 </div>
                 <div class="text-center pb-2">
                     <a href="{{ route('dishes.index') }}" class="btn btn-warning"> Quay lại</a>

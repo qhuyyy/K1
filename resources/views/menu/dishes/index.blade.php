@@ -3,10 +3,26 @@
 @section('title', 'Thông tin các món ăn')
 
 @section('main')
-    <section class="slide-section pt-3">    
+    <section class="slide-section pt-3">  
+        <div class="container text-center">
+            <ul class="nav nav-tabs justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('dailymenus.index') }}">Quản lý thực đơn</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ route('dishes.index') }}">Quản lý món ăn</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{{ route('dishtypes.index') }}">Quản lý loại món ăn</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('ingredients.index') }}">Quản lý nguyên liệu</a>
+                </li>
+            </ul>    
+        </div>  
         <div class="container">
             <div class="row">
-                <div class="text-center">
+                <div class="text-center pt-2">
                     <h2>Bộ lọc</h2>
                 </div>
                 <div class="col-md-3">
@@ -86,7 +102,6 @@
                 </tbody>
             </table>
             <div class="container text-center pt-2">
-                <a href="{{ route('dishtypes.index') }}" class="btn btn-warning">Quản lý loại món ăn</a>
                 <a href="#" id="add-dish-link" class="btn btn-warning">Thêm mới món ăn</a>
             </div>
         </div>

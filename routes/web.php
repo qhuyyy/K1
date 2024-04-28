@@ -7,6 +7,8 @@ use App\Http\Controllers\ImportedFoodController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\DishController;
 use App\Http\Controllers\DishTypeController;
+use App\Http\Controllers\DailyMenuController;
+
 
 
 Route::get('/', function () {
@@ -23,9 +25,13 @@ Route::get('importedfood/create', [ImportedFoodController::class, 'createWithout
 
 Route::resource('ingredients',IngredientController::class);
 
+Route::resource('dishtypes',DishTypeController::class);
+
 Route::resource('dishes',DishController::class);
 Route::get('/filter-dishes', [DishController::class, 'filterDish'])->name('filter.dishes');
 Route::get('dishes/create', [DishController::class, 'createWithoutParams'])->name('dishes.createWithoutParams');
 Route::get('dishes/create/{dishtype}', [DishController::class, 'create'])->name('dishes.create');
 
-Route::resource('dishtypes',DishTypeController::class);
+
+Route::resource('dailymenus',DailyMenuController::class);
+Route::get('/filter-dailymenus', [DailyMenuController::class, 'filterDailyMenu'])->name('filter.dailymenus');

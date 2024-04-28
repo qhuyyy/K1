@@ -58,10 +58,8 @@ class DishController extends Controller
 
     public function createWithoutParams()
     {
-        // Lấy danh sách các loại thực phẩm và đơn vị tính
         $dishtypes = DishType::all();
         $ingredients = Ingredient::all();
-        // Trả về view 'create' với dữ liệu đã lấy được
         return view('menu.dishes.create', compact('dishtypes','ingredients'));
     }
     /**

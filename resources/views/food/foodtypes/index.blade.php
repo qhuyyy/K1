@@ -70,8 +70,8 @@
                 </table>
             </div>
             <div class="container text-center pt-2">
-                <a href="{{ route('receivedfood.index') }}" class="btn btn-primary">Quản lý thực phẩm</a>
-                <a href="{{ route('foodtypes.create') }}" class="btn btn-primary">Thêm mới loại thực phẩm</a>
+                <a href="{{ route('importedfood.index') }}" class="btn btn-warning">Quản lý thực phẩm</a>
+                <a href="{{ route('foodtypes.create') }}" class="btn btn-warning">Thêm mới loại thực phẩm</a>
             </div>
         </div>
     </section>

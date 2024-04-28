@@ -4,8 +4,24 @@
 
 @section('main')
     <section class="slide-section">
+        <div class="container text-center">
+            <ul class="nav nav-tabs justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('dailymenus.index') }}">Quản lý thực đơn</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('dishes.index') }}">Quản lý món ăn</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{{ route('dishtypes.index') }}">Quản lý loại món ăn</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('ingredients.index') }}">Quản lý nguyên liệu</a>
+                </li>
+            </ul>    
+        </div> 
         <div class="container">
-            <div class="text-center pb-2">
+            <div class="text-center pb-2 pt-2">
                 <h2>Các loại món ăn hiện có tại nhà ăn</h2>
             </div>
             <div class="container">
@@ -68,7 +84,6 @@
                 </table>
             </div>
             <div class="container text-center pt-2">
-                <a href="{{ route('dishes.index') }}" class="btn btn-warning">Quản lý món ăn</a>
                 <a href="{{ route('dishtypes.create') }}" class="btn btn-warning">Thêm mới loại món ăn</a>
             </div>
         </div>
