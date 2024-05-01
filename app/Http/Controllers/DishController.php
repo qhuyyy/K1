@@ -93,6 +93,7 @@ class DishController extends Controller
         $request->validate([
             'DishName' => 'required|string|max:255',
             'DishType_ID' => 'required|exists:dish_types,id',
+            'amount' => 'array', // Kiểm tra xem 'amount' có phải là một mảng không
         ]);
 
         $dish = Dish::findOrFail($id);
@@ -101,9 +102,17 @@ class DishController extends Controller
             'DishName' => $request->input('DishName'),
             'DishType_ID' => $request->input('DishType_ID'),
         ]);
-        if ($request->has('ingredients')) {
-            $ingredientIDs = $request->input('ingredients');
-            $dish->ingredients()->sync($ingredientIDs);
+
+        // Lưu giá trị Amount tương ứng vào bảng trung gian dish_ingredients
+        if ($request->has('ingredient')) {
+            $ingredientData = [];
+
+            foreach ($request->input('ingredient') as $key => $ingredientID) {
+                $amount = $request->input('amount')[$key];
+                $ingredientData[$ingredientID] = ['Amount' => $amount];
+            }
+
+            $dish->ingredients()->sync($ingredientData);
         } else {
             $dish->ingredients()->detach();
         }
