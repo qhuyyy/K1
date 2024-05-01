@@ -46,11 +46,7 @@
                         <th scope="col">STT</th>
                         <th scope="col">Tên món ăn</th>
                         <th scope="col">Loại món ăn</th>
-                        <th scope="col">Nguyên liệu 1</th>
-                        <th scope="col">Nguyên liệu 2</th>
-                        <th scope="col">Nguyên liệu 3</th>
-                        <th scope="col">Nguyên liệu 4</th>
-                        <th scope="col">Nguyên liệu 5</th>
+                        <th scope="col">Danh sách nguyên liệu</th>
                         <th scope="col">Hành động</th>
                     </tr>
                 </thead>
@@ -60,11 +56,13 @@
                             <td>{{ $dish->id }}</td>
                             <td>{{ $dish->DishName }}</td>
                             <td>{{ $dish->dish_type->DishTypeName }}</td>
-                            <td>{{ $dish->ingredient1 ? $dish->ingredient1->IngredientName : '' }}</td>
-                            <td>{{ $dish->ingredient2 ? $dish->ingredient2->IngredientName : '' }}</td>
-                            <td>{{ $dish->ingredient3 ? $dish->ingredient3->IngredientName : '' }}</td>
-                            <td>{{ $dish->ingredient4 ? $dish->ingredient4->IngredientName : '' }}</td>
-                            <td>{{ $dish->ingredient5 ? $dish->ingredient5->IngredientName : '' }}</td>
+                            <td>
+                                <ul>
+                                    @foreach($dish->ingredients()->orderBy('IngredientName')->get() as $ingredient)
+                                        <li>{{ $ingredient->IngredientName }}</li>
+                                    @endforeach
+                                </ul>       
+                            </td>
                             <td>
                                 <div class="mx-3">
                                     <a href="{{ route('dishes.show', $dish->id) }}"><img src="{{ URL('images/ShowIcon.svg') }}"

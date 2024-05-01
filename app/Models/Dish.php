@@ -8,28 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Dish extends Model
 {
     use HasFactory;
-    public function ingredient1()
-    {
-        return $this->belongsTo(Ingredient::class, 'Ingredient1_ID');
-    }
-    public function ingredient2()
-    {
-        return $this->belongsTo(Ingredient::class, 'Ingredient2_ID');
-    }
-    public function ingredient3()
-    {
-        return $this->belongsTo(Ingredient::class, 'Ingredient3_ID');
-    }
-    public function ingredient4()
-    {
-        return $this->belongsTo(Ingredient::class, 'Ingredient4_ID');
-    }
-    public function ingredient5()
-    {
-        return $this->belongsTo(Ingredient::class, 'Ingredient5_ID');
-    }
+    protected $fillable = [
+        'DishName',
+        'DishType_ID', 
+    ];
+    public $timestamps = true;
     public function dish_type()
     {
         return $this->belongsTo(DishType::class, 'DishType_ID');
+    }
+    public function ingredients()
+    {
+        return $this->belongsToMany(Ingredient::class, 'dish_ingredients', 'Dish_ID', 'Ingredient_ID')->withPivot('Amount');
     }
 }

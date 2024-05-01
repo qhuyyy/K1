@@ -33,35 +33,37 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="mb-3">
-                            @for ($i = 1; $i <= 5; $i++)
+                        <div id="ingredients-container">
+                            <div class="mb-3">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="ingredient{{ $i }}" class="form-label">Nguyên liệu {{ $i }}</label>
-                                            <select class="form-select" id="ingredient{{ $i }}" onchange="updateIngredientAndUnitId('{{ $i }}')">
-                                                <option value="">Chọn nguyên liệu</option>
-                                                @foreach ($ingredients as $ingredient)
-                                                    <option value="{{ $ingredient->id }}" data-ingredient-id="{{ $ingredient->id }}" data-unit-id="{{ $ingredient->Unit_ID }}">{{ $ingredient->IngredientName }}</option>
-                                                @endforeach
-                                            </select>
-                                            <input type="hidden" id="ingredient_id{{ $i }}" name="Ingredient{{ $i }}_ID">
-                                        </div>
+                                    <div class="col-md-7">
+                                        <label for="ingredient" class="form-label">Nguyên liệu</label>
+                                        <select class="form-select" id="ingredient" name="ingredient[]">
+                                            <option value="">- Chọn nguyên liệu -</option>
+                                            @foreach ($ingredients as $ingredient)
+                                                <option value="{{ $ingredient->id }}" data-unit-name="{{ $ingredient->unit->UnitName }}">{{ $ingredient->IngredientName }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="col-md-3">
-                                        <div class="mb-3">
-                                            <label for="amount{{ $i }}" class="form-label">Định lượng cho 10 suất</label>
-                                            <input type="text" class="form-control" id="amount{{ $i }}" name="Amount{{ $i }}"
-                                                value="" placeholder="Nhập định lượng">
-                                        </div>
+                                        <label for="amount" class="form-label">Định lượng cho 10 suất</label>
+                                        <input class="form-control" type="text" name="amount[]" id="amount">
                                     </div>
-                                    <div class="col-md-3">
-                                        <label for="" class="form-label">Đơn vị tính</label>
-                                        <input type="text" class="form-control" id="unit_name{{ $i }}" name="Unit{{ $i }}_Name" readonly>
-                                    </div>               
+                                    <div class="col-md-2">
+                                        <label for="unit" class="form-label">Đơn vị tính</label>
+                                        <input class="form-control" type="text" id="unit" name="unit" readonly>
+                                    </div>
                                 </div>
-                            @endfor
-                        </div>                         
+                            </div>
+                        </div>
+                        <div class="row d-flex justify-content-center align-items-center pt-2 text-center">
+                            <div class="col-md-3">
+                                <button type="button" id="add-ingredient" class="btn btn-info">Thêm nguyên liệu</button>
+                            </div>
+                            <div class="col-md-3">
+                                <button type="button" id="remove-ingredient" class="btn btn-danger">Bớt nguyên liệu</button>
+                            </div>
+                        </div>
                     </div>
                     <div class="text-center">
                         <span>Không có nguyên liệu bạn cần ?</span>
@@ -84,25 +86,56 @@
 
 @section('script')
     <script>
-        function updateIngredientAndUnitId(index) {
-            var select = document.getElementById("ingredient" + index);
-            var unitNameInput = document.getElementById("unit_name" + index);
-            var selectedOption = select.options[select.selectedIndex];
-            var unitID = selectedOption.getAttribute("data-unit-id");
-            var ingredientID = selectedOption.getAttribute("data-ingredient-id");
+        document.getElementById('add-ingredient').addEventListener('click', function() {
+            var container = document.getElementById('ingredients-container');
+            var div = document.createElement('div');
+            div.classList.add('mb-3');
+            div.innerHTML = `
+                <div class="row">
+                    <div class="col-md-7">
+                        <label for="ingredient" class="form-label">Nguyên liệu</label>
+                        <select class="form-select" name="ingredient[]" onchange="updateUnit(this)">
+                            <option value="">- Chọn nguyên liệu -</option>
+                            @foreach ($ingredients as $ingredient)
+                                <option value="{{ $ingredient->id }}" data-unit-name="{{ $ingredient->unit->UnitName }}">{{ $ingredient->IngredientName }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="amount" class="form-label">Định lượng cho 10 suất</label>
+                        <input class="form-control" type="text" name="amount[]" id="amount">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="unit" class="form-label">Đơn vị tính</label>
+                        <input class="form-control" type="text" name="unit[]" id="unit" readonly>
+                    </div>
+                </div>
+            `;
+            container.appendChild(div);
+        });
 
-            if (ingredientID) {
-                // Nếu người dùng đã chọn một nguyên liệu, cập nhật đơn vị tính bình thường
-                document.getElementById("ingredient_id" + index).value = ingredientID;
-                var units = {!! json_encode($units) !!};
-                var unitName = units.find(unit => unit.id == unitID).UnitName;
-                unitNameInput.value = unitName;
-            } else {
-                // Nếu người dùng không chọn nguyên liệu, đặt giá trị của đơn vị tính là rỗng
-                document.getElementById("ingredient_id" + index).value = '';
-                unitNameInput.value = '';
+        document.getElementById('remove-ingredient').addEventListener('click', function() {
+            var container = document.getElementById('ingredients-container');
+            var children = container.getElementsByClassName('mb-3');
+            if (children.length > 1) {
+                container.removeChild(children[children.length - 1]);
             }
-        }       
+        });
+
+        function updateUnit(select) {
+            var selectedOption = select.options[select.selectedIndex];
+            var unitName = selectedOption.getAttribute('data-unit-name');
+            var unitInput = select.parentElement.nextElementSibling.nextElementSibling.querySelector('#unit');
+            unitInput.value = unitName || '';
+        }     
+
+        document.getElementById('ingredient').addEventListener('change', function() {
+            var select = document.getElementById('ingredient');
+            var selectedOption = select.options[select.selectedIndex];
+            var unitName = selectedOption.getAttribute('data-unit-name');
+
+            document.getElementById('unit').value = unitName || '';
+        });
     </script>
 @endsection
     
