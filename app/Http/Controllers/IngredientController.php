@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Ingredient;
+use App\Models\Unit;
 
 class IngredientController extends Controller
 {
@@ -21,7 +22,8 @@ class IngredientController extends Controller
      */
     public function create()
     {
-        return view('menu.ingredients.create');
+        $units = Unit::all();
+        return view('menu.ingredients.create',compact('units'));
     }
 
     /**
@@ -31,6 +33,8 @@ class IngredientController extends Controller
     {
         $ingredient = new Ingredient;
         $ingredient->IngredientName = $request->IngredientName;
+        $ingredient->Price = $request->Price;
+        $ingredient->Unit_ID = $request->Unit_ID;
 
         $ingredient->save();
     
@@ -53,7 +57,8 @@ class IngredientController extends Controller
     public function edit(string $id)
     {
         $ingredient = Ingredient::find($id);
-        return view('menu.ingredients.edit',compact('ingredient'));
+        $units = Unit::all();
+        return view('menu.ingredients.edit',compact('ingredient','units'));
     }
 
     /**
@@ -64,6 +69,8 @@ class IngredientController extends Controller
         Ingredient::where('id', $request->input('id'))
             ->update([
                 'IngredientName' => $request->input('IngredientName'),
+                'Price' => $request->input('Price'),
+                'Unit_ID' => $request->input('Unit_ID')
             ]);
 
         return redirect()->route('ingredients.index');

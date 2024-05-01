@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\DishType;
 use App\Models\Ingredient;
 use App\Models\Dish;
+use App\Models\Unit;
 
 class DishController extends Controller
 {
@@ -53,14 +54,16 @@ class DishController extends Controller
     {
         $dishtypes = DishType::all();
         $ingredients = Ingredient::all();
-        return view('menu.dishes.create', compact('dishtypes','ingredients'));
+        $units = Unit::all();
+        return view('menu.dishes.create', compact('dishtypes','ingredients','units'));
     }
 
     public function createWithoutParams()
     {
         $dishtypes = DishType::all();
         $ingredients = Ingredient::all();
-        return view('menu.dishes.create', compact('dishtypes','ingredients'));
+        $units = Unit::all();
+        return view('menu.dishes.create', compact('dishtypes','ingredients','units'));
     }
     /**
      * Store a newly created resource in storage.
@@ -71,14 +74,18 @@ class DishController extends Controller
         $dish->DishName = $request->DishName;
         $dish->DishType_ID = $request->dishtype;
         $dish->Ingredient1_ID = $request->Ingredient1_ID;
+        $dish->Amount1 = $request->Amount1;
         $dish->Ingredient2_ID = $request->Ingredient2_ID;
+        $dish->Amount2 = $request->Amount2;
         $dish->Ingredient3_ID = $request->Ingredient3_ID;
+        $dish->Amount3 = $request->Amount3;
         $dish->Ingredient4_ID = $request->Ingredient4_ID;
+        $dish->Amount4 = $request->Amount4;
         $dish->Ingredient5_ID = $request->Ingredient5_ID;
+        $dish->Amount5 = $request->Amount5;
 
         $dish->save();
-    
-        
+
         return redirect()->route('dishes.index');
     }
 
@@ -89,8 +96,9 @@ class DishController extends Controller
     {
         $dishtypes = DishType::all();
         $ingredients = Ingredient::all();
+        $units = Unit::all();
         $dish = Dish::where('id', '=', $id)->select('*')->first();
-        return view('menu.dishes.show',compact('dish', 'dishtypes', 'ingredients'));
+        return view('menu.dishes.show',compact('dish', 'dishtypes', 'ingredients','units'));
     }
 
     /**
@@ -98,10 +106,11 @@ class DishController extends Controller
      */
     public function edit(string $id)
     {
+        $units = Unit::all();
         $dish = Dish::find($id);
         $dishtypes = DishType::all();
         $ingredients = Ingredient::all();
-        return view('menu.dishes.edit',compact('dish','dishtypes','ingredients'));
+        return view('menu.dishes.edit',compact('dish','dishtypes','ingredients','units'));
     }
 
     /**
@@ -114,10 +123,15 @@ class DishController extends Controller
                 'DishName' => $request->input('DishName'),
                 'DishType_ID' => $request->input('DishType_ID'),
                 'Ingredient1_ID' => $request->input('Ingredient1_ID'),
+                'Amount1' => $request->input('Amount1'),
                 'Ingredient2_ID' => $request->input('Ingredient2_ID'),
+                'Amount2' => $request->input('Amount2'),
                 'Ingredient3_ID' => $request->input('Ingredient3_ID'),
+                'Amount3' => $request->input('Amount3'),
                 'Ingredient4_ID' => $request->input('Ingredient4_ID'),
-                'Ingredient5_ID' => $request->input('Ingredient5_ID')
+                'Amount4' => $request->input('Amount4'),
+                'Ingredient5_ID' => $request->input('Ingredient5_ID'),
+                'Amount5' => $request->input('Amount5')
             ]);
 
         return redirect()->route('dishes.index');

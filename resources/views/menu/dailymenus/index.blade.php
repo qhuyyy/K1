@@ -47,7 +47,7 @@
                         <th scope="col">Ngày</th>
                         <th scope="col">Số lượng suất ăn dự kiến</th>
                         <th scope="col">Các món ăn</th>
-                        <th scope="col">Nguyên liệu</th>
+                        <th scope="col">Số lượng suất</th>
                         <th scope="col">Hành động</th>
                     </tr>
                 </thead>
@@ -56,7 +56,7 @@
                         <tr>
                             <td>{{ $dailymenu->id }}</td>
                             <td>{{ $dailymenu->Date }}</td>
-                            <td>{{ $dailymenu->NumberOfPortions }}</td>
+                            <td>{{ $dailymenu->NumberOfTotalPortions }}</td>
                             <td>
                                 <ul>
                                     @for ($i = 1; $i <= 10; $i++)
@@ -70,15 +70,7 @@
                                 <ul>
                                     @for ($i = 1; $i <= 10; $i++)
                                         @if (!is_null($dailymenu["Dish{$i}"]))
-                                            @for ($j = 1; $j <= 5; $j++)
-                                                @php
-                                                    $ingredient_property = "Ingredient" . $j . "_ID";
-                                                    if (!is_null($dailymenu["Dish{$i}"]->$ingredient_property)) {
-                                                        $ingredient = App\Models\Ingredient::find($dailymenu["Dish{$i}"]->$ingredient_property);
-                                                        echo "<li>{$ingredient->IngredientName}</li>";
-                                                    }
-                                                @endphp
-                                            @endfor
+                                            <li>{{ $dailymenu["NumberOfPortions{$i}"] }}</li>
                                         @endif
                                     @endfor
                                 </ul>

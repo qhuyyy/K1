@@ -52,7 +52,9 @@ class DailyMenuController extends Controller
     public function create()
     {
         $dishes = Dish::all();
-
+        //Truy cập lấy ra tất cả bản ghi có id = id món ăn, id nguyên liệu
+        //làm triong hàm này 
+       // xong đẩy dữ liệu qua view
         return view('menu.dailymenus.create', compact('dishes'));
     }
 
@@ -63,17 +65,14 @@ class DailyMenuController extends Controller
     {
         $dailymenu = new DailyMenu;
         $dailymenu->Date = $request->Date;
-        $dailymenu->NumberOfPortions = $request->NumberOfPortions;
-        $dailymenu->Dish1_ID = $request->Dish1_ID;
-        $dailymenu->Dish2_ID = $request->Dish2_ID;
-        $dailymenu->Dish3_ID = $request->Dish3_ID;
-        $dailymenu->Dish4_ID = $request->Dish4_ID;
-        $dailymenu->Dish5_ID = $request->Dish5_ID;
-        $dailymenu->Dish6_ID = $request->Dish6_ID;
-        $dailymenu->Dish7_ID = $request->Dish7_ID;
-        $dailymenu->Dish8_ID = $request->Dish8_ID;
-        $dailymenu->Dish9_ID = $request->Dish9_ID;
-        $dailymenu->Dish10_ID = $request->Dish10_ID;
+        $dailymenu->NumberOfTotalPortions = $request->NumberOfTotalPortions;
+        for ($i = 1; $i <= 10; $i++) {
+            $fieldName = "Dish{$i}_ID";
+            $dailymenu->$fieldName = $request->$fieldName;
+        
+            $portionsFieldName = "NumberOfPortions{$i}";
+            $dailymenu->$portionsFieldName = $request->$portionsFieldName;
+        }
 
         $dailymenu->save();
     

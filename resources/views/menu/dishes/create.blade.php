@@ -34,55 +34,34 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="ingredient1" class="form-label">Nguyên liệu 1</label>
-                            <select class="form-select" id="ingredient1" onchange="updateIngredientId('ingredient1', 'ingredient_id1')">
-                                <option value="">Chọn nguyên liệu</option>
-                                @foreach ($ingredients as $ingredient)
-                                    <option value="{{ $ingredient->id }}" data-ingredient-id="{{ $ingredient->id }}">{{ $ingredient->IngredientName }}</option>
-                                @endforeach
-                            </select>
-                            <input type="hidden" id="ingredient_id1" name="Ingredient1_ID">
-                        </div>
-                        <div class="mb-3">
-                            <label for="ingredient2" class="form-label">Nguyên liệu 2</label>
-                            <select class="form-select" id="ingredient2" onchange="updateIngredientId('ingredient2', 'ingredient_id2')">
-                                <option value="">Chọn nguyên liệu</option>
-                                @foreach ($ingredients as $ingredient)
-                                    <option value="{{ $ingredient->id }}" data-ingredient-id="{{ $ingredient->id }}">{{ $ingredient->IngredientName }}</option>
-                                @endforeach
-                            </select>
-                            <input type="hidden" id="ingredient_id2" name="Ingredient2_ID">
-                        </div>
-                        <div class="mb-3">
-                            <label for="ingredient3" class="form-label">Nguyên liệu 3</label>
-                            <select class="form-select" id="ingredient3" onchange="updateIngredientId('ingredient3', 'ingredient_id3')">
-                                <option value="">Chọn nguyên liệu</option>
-                                @foreach ($ingredients as $ingredient)
-                                    <option value="{{ $ingredient->id }}" data-ingredient-id="{{ $ingredient->id }}">{{ $ingredient->IngredientName }}</option>
-                                @endforeach
-                            </select>
-                            <input type="hidden" id="ingredient_id3" name="Ingredient3_ID">
-                        </div>
-                        <div class="mb-3">
-                            <label for="ingredient4" class="form-label">Nguyên liệu 4</label>
-                            <select class="form-select" id="ingredient4" onchange="updateIngredientId('ingredient4', 'ingredient_id4')">
-                                <option value="">Chọn nguyên liệu</option>
-                                @foreach ($ingredients as $ingredient)
-                                    <option value="{{ $ingredient->id }}" data-ingredient-id="{{ $ingredient->id }}">{{ $ingredient->IngredientName }}</option>
-                                @endforeach
-                            </select>
-                            <input type="hidden" id="ingredient_id4" name="Ingredient4_ID">
-                        </div>
-                        <div class="mb-3">
-                            <label for="ingredient5" class="form-label">Nguyên liệu 5</label>
-                            <select class="form-select" id="ingredient5" onchange="updateIngredientId('ingredient5', 'ingredient_id5')">
-                                <option value="">Chọn nguyên liệu</option>
-                                @foreach ($ingredients as $ingredient)
-                                    <option value="{{ $ingredient->id }}" data-ingredient-id="{{ $ingredient->id }}">{{ $ingredient->IngredientName }}</option>
-                                @endforeach
-                            </select>
-                            <input type="hidden" id="ingredient_id5" name="Ingredient5_ID">
-                        </div>
+                            @for ($i = 1; $i <= 5; $i++)
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="ingredient{{ $i }}" class="form-label">Nguyên liệu {{ $i }}</label>
+                                            <select class="form-select" id="ingredient{{ $i }}" onchange="updateIngredientAndUnitId('{{ $i }}')">
+                                                <option value="">Chọn nguyên liệu</option>
+                                                @foreach ($ingredients as $ingredient)
+                                                    <option value="{{ $ingredient->id }}" data-ingredient-id="{{ $ingredient->id }}" data-unit-id="{{ $ingredient->Unit_ID }}">{{ $ingredient->IngredientName }}</option>
+                                                @endforeach
+                                            </select>
+                                            <input type="hidden" id="ingredient_id{{ $i }}" name="Ingredient{{ $i }}_ID">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label for="amount{{ $i }}" class="form-label">Định lượng cho 10 suất</label>
+                                            <input type="text" class="form-control" id="amount{{ $i }}" name="Amount{{ $i }}"
+                                                value="" placeholder="Nhập định lượng">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="" class="form-label">Đơn vị tính</label>
+                                        <input type="text" class="form-control" id="unit_name{{ $i }}" name="Unit{{ $i }}_Name" readonly>
+                                    </div>               
+                                </div>
+                            @endfor
+                        </div>                         
                     </div>
                     <div class="text-center">
                         <span>Không có nguyên liệu bạn cần ?</span>
@@ -105,13 +84,25 @@
 
 @section('script')
     <script>
-        function updateIngredientId(selectId, inputId) {
-            var select = document.getElementById(selectId);
-            var ingredientIdInput = document.getElementById(inputId);
+        function updateIngredientAndUnitId(index) {
+            var select = document.getElementById("ingredient" + index);
+            var unitNameInput = document.getElementById("unit_name" + index);
             var selectedOption = select.options[select.selectedIndex];
-            var ingredientId = selectedOption.getAttribute("data-ingredient-id");
-            ingredientIdInput.value = ingredientId;
-        }
+            var unitID = selectedOption.getAttribute("data-unit-id");
+            var ingredientID = selectedOption.getAttribute("data-ingredient-id");
+
+            if (ingredientID) {
+                // Nếu người dùng đã chọn một nguyên liệu, cập nhật đơn vị tính bình thường
+                document.getElementById("ingredient_id" + index).value = ingredientID;
+                var units = {!! json_encode($units) !!};
+                var unitName = units.find(unit => unit.id == unitID).UnitName;
+                unitNameInput.value = unitName;
+            } else {
+                // Nếu người dùng không chọn nguyên liệu, đặt giá trị của đơn vị tính là rỗng
+                document.getElementById("ingredient_id" + index).value = '';
+                unitNameInput.value = '';
+            }
+        }       
     </script>
 @endsection
     

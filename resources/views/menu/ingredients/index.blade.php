@@ -29,6 +29,8 @@
                     <tr>
                         <th scope="col">STT</th>
                         <th scope="col">Tên nguyên liệu</th>
+                        <th scope="col">Đơn giá</th>
+                        <th scope="col">Đơn vị tính</th>
                         <th scope="col">Hành động</th>
                     </tr>
                 </thead>
@@ -37,6 +39,8 @@
                         <tr>
                             <td>{{ $ingredient->id }}</td>
                             <td>{{ $ingredient->IngredientName }}</td>
+                            <td>{{ number_format($ingredient->Price, 0, ',', '.') }}</td>
+                            <td>{{ $ingredient->unit->UnitName}}</td>
                             <td>
                                 <div class="mx-3">
                                     <a href="{{ route('ingredients.show', $ingredient->id) }}"><img

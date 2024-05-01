@@ -20,7 +20,22 @@
                         <div class="mb-3">
                             <label for="formGroupExampleInput2" class="form-label">Tên nguyên liệu</label>
                             <input type="text" class="form-control" id="formGroupExampleInput2" name="IngredientName"
-                                value="" placeholder="Nhập họ tên đầy đủ của nhân viên">
+                                value="" placeholder="Nhập tên nguyên liệu">
+                        </div>
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput2" class="form-label">Đơn giá</label>
+                            <input type="text" class="form-control" id="formGroupExampleInput2" name="Price"
+                                value="" placeholder="Nhập đơn giá">
+                        </div>
+                        <div class="mb-3">
+                            <label for="unit" class="form-label">Đơn vị tính</label>
+                            <select class="form-select" id="unit" onchange="updateUnitId()">
+                                <option value="">- Chọn đơn vị tính -</option>
+                                @foreach ($units as $unit)
+                                    <option value="{{ $unit->id }}" data-unit-id="{{ $unit->id }}">{{ $unit->UnitName }}</option>
+                                @endforeach
+                            </select>
+                            <input type="hidden" id="unit_id" name="Unit_ID">
                         </div>
                     </div>
                     <div class="container d-flex justify-content-center align-items-center">
@@ -42,6 +57,13 @@
     <script>
         function goBack() {
             window.history.back();
+        }
+        function updateUnitId() {
+            var select = document.getElementById("unit");
+            var UnitIdInput = document.getElementById("unit_id");
+            var selectedOption = select.options[select.selectedIndex];
+            var unitID = selectedOption.getAttribute("data-unit-id");
+            UnitIdInput.value = unitID;
         }
     </script>
 @endsection

@@ -20,6 +20,16 @@
                         <input type="text" readonly class="form-control" id="formGroupExampleInput2"
                             name="Name" value="{{ $ingredient->IngredientName }}">
                     </div>
+                    <div class="mb-3">
+                        <label for="formGroupExampleInput2" class="form-label">Đơn giá</label>
+                        <input type="text" readonly class="form-control" id="formGroupExampleInput2"
+                            name="Name" value="{{ $ingredient->Price }}">     
+                    </div>
+                    <div class="mb-3">
+                        <label for="formGroupExampleInput2" class="form-label">Đơn vị tính</label>
+                        <input type="text" readonly class="form-control" id="formGroupExampleInput2"
+                            value="{{ $ingredient->unit->UnitName }}">
+                    </div>
                 <div class="text-center pb-2">
                     <a href="{{ route('ingredients.index') }}" class="btn btn-warning"> Quay lại</a>
                 </div>        

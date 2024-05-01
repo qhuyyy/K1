@@ -14,27 +14,12 @@ return new class extends Migration
         Schema::create('daily_menus', function (Blueprint $table) {
             $table->id();
             $table->date('Date')->unique();
-            $table->integer('NumberOfPortions');
-            $table->unsignedBigInteger('Dish1_ID')->nullable();
-            $table->foreign('Dish1_ID')->references('id')->on('dishes')->onDelete('cascade');
-            $table->unsignedBigInteger('Dish2_ID')->nullable();
-            $table->foreign('Dish2_ID')->references('id')->on('dishes')->onDelete('cascade');
-            $table->unsignedBigInteger('Dish3_ID')->nullable();
-            $table->foreign('Dish3_ID')->references('id')->on('dishes')->onDelete('cascade');
-            $table->unsignedBigInteger('Dish4_ID')->nullable();
-            $table->foreign('Dish4_ID')->references('id')->on('dishes')->onDelete('cascade');
-            $table->unsignedBigInteger('Dish5_ID')->nullable();
-            $table->foreign('Dish5_ID')->references('id')->on('dishes')->onDelete('cascade');
-            $table->unsignedBigInteger('Dish6_ID')->nullable();
-            $table->foreign('Dish6_ID')->references('id')->on('dishes')->onDelete('cascade');
-            $table->unsignedBigInteger('Dish7_ID')->nullable();
-            $table->foreign('Dish7_ID')->references('id')->on('dishes')->onDelete('cascade');
-            $table->unsignedBigInteger('Dish8_ID')->nullable();
-            $table->foreign('Dish8_ID')->references('id')->on('dishes')->onDelete('cascade');
-            $table->unsignedBigInteger('Dish9_ID')->nullable();
-            $table->foreign('Dish9_ID')->references('id')->on('dishes')->onDelete('cascade');
-            $table->unsignedBigInteger('Dish10_ID')->nullable();
-            $table->foreign('Dish10_ID')->references('id')->on('dishes')->onDelete('cascade');
+            $table->integer('NumberOfTotalPortions');
+            for ($i = 1; $i <= 10; $i++) {
+                $table->unsignedBigInteger("Dish{$i}_ID")->nullable();
+                $table->foreign("Dish{$i}_ID")->references('id')->on('dishes')->onDelete('cascade');
+                $table->integer("NumberOfPortions{$i}")->nullable();
+            }
             $table->timestamps();
         });
     }

@@ -89,35 +89,33 @@
 @endsection
 
 @section('script')
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-    // Gọi hàm updateFoodTypeId() khi trang web được tải lần đầu tiên
-    updateFoodTypeId();
-    });
-    document.addEventListener("DOMContentLoaded", function() {
-    // Gọi hàm updateFoodTypeId() khi trang web được tải lần đầu tiên
-    updateUnitId();
-});
-    function updateFoodTypeId() {
-        var select = document.getElementById("foodtype");
-        var FoodTypeIdInput = document.getElementById("foodtype_id");
-        var selectedOption = select.options[select.selectedIndex];
-        var foodtypeID = selectedOption.getAttribute("data-foodtype-id");
-        FoodTypeIdInput.value = foodtypeID;
-    }
-    function updateUnitId() {
-        var select = document.getElementById("unit");
-        var UnitIdInput = document.getElementById("unit_id");
-        var selectedOption = select.options[select.selectedIndex];
-        var unitID = selectedOption.getAttribute("data-unit-id");
-        UnitIdInput.value = unitID;
-    }
-    function calculateTotal() {
-    var unitPrice = parseFloat(document.getElementById('formGroupExampleInput3').value);
-    var quantity = parseFloat(document.getElementById('formGroupExampleInput4').value);
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            updateFoodTypeId();
+        });
+        document.addEventListener("DOMContentLoaded", function() {
+            updateUnitId();
+        });
+        function updateFoodTypeId() {
+            var select = document.getElementById("foodtype");
+            var FoodTypeIdInput = document.getElementById("foodtype_id");
+            var selectedOption = select.options[select.selectedIndex];
+            var foodtypeID = selectedOption.getAttribute("data-foodtype-id");
+            FoodTypeIdInput.value = foodtypeID;
+        }
+        function updateUnitId() {
+            var select = document.getElementById("unit");
+            var UnitIdInput = document.getElementById("unit_id");
+            var selectedOption = select.options[select.selectedIndex];
+            var unitID = selectedOption.getAttribute("data-unit-id");
+            UnitIdInput.value = unitID;
+        }
+        function calculateTotal() {
+        var unitPrice = parseFloat(document.getElementById('formGroupExampleInput3').value);
+        var quantity = parseFloat(document.getElementById('formGroupExampleInput4').value);
 
-    var totalPrice = unitPrice * quantity;
-    document.getElementById('totalPrice').value = totalPrice;
-}
-</script>
+        var totalPrice = unitPrice * quantity;
+        document.getElementById('totalPrice').value = totalPrice;
+    }
+    </script>
 @endsection
