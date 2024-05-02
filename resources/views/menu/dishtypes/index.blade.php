@@ -7,7 +7,7 @@
         <div class="container text-center">
             <ul class="nav nav-tabs justify-content-center">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('dailymenus.index') }}">Quản lý thực đơn</a>
+                    <a class="nav-link" href="{{ route('menus.index') }}">Quản lý thực đơn</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('dishes.index') }}">Quản lý món ăn</a>

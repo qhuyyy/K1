@@ -7,7 +7,7 @@
         <div class="container text-center">
             <ul class="nav nav-tabs justify-content-center">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('dailymenus.index') }}">Quản lý thực đơn</a>
+                    <a class="nav-link" href="{{ route('menus.index') }}">Quản lý thực đơn</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ route('dishes.index') }}">Quản lý món ăn</a>
@@ -124,11 +124,7 @@
                                             <td>' + dishes[i]['id'] + '</td>\
                                             <td>' + dishes[i]['DishName'] + '</td>\
                                             <td>' + (dishes[i]['dish_type'] ? dishes[i]['dish_type']['DishTypeName'] : '') + '</td>\
-                                            <td>' + (dishes[i]['ingredient1']  ? dishes[i]['ingredient1']['IngredientName'] : '') + '</td>\
-                                            <td>' + (dishes[i]['ingredient2']  ? dishes[i]['ingredient2']['IngredientName'] : '') + '</td>\
-                                            <td>' + (dishes[i]['ingredient3']  ? dishes[i]['ingredient3']['IngredientName'] : '') + '</td>\
-                                            <td>' + (dishes[i]['ingredient4']  ? dishes[i]['ingredient4']['IngredientName'] : '') + '</td>\
-                                            <td>' + (dishes[i]['ingredient5']  ? dishes[i]['ingredient5']['IngredientName'] : '') + '</td>\
+                                            <td>abc</td>\
                                             <td>\
                                                 <div class="mx-3">\
                                                     <a href="/dishes/' + dishes[i]['id'] + '"><img src="{{ URL('images/ShowIcon.svg') }}" alt="Show Icon"></a>\

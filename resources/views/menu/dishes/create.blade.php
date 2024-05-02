@@ -35,25 +35,7 @@
                         </div>
                         <div id="ingredients-container">
                             <div class="mb-3">
-                                <div class="row">
-                                    <div class="col-md-7">
-                                        <label for="ingredient" class="form-label">Nguyên liệu</label>
-                                        <select class="form-select" id="ingredient" name="ingredient[]">
-                                            <option value="">- Chọn nguyên liệu -</option>
-                                            @foreach ($ingredients as $ingredient)
-                                                <option value="{{ $ingredient->id }}" data-unit-name="{{ $ingredient->unit->UnitName }}">{{ $ingredient->IngredientName }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label for="amount" class="form-label">Định lượng cho 10 suất</label>
-                                        <input class="form-control" type="text" name="amount[]" id="amount">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label for="unit" class="form-label">Đơn vị tính</label>
-                                        <input class="form-control" type="text" id="unit" name="unit" readonly>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
                         <div class="row d-flex justify-content-center align-items-center pt-2 text-center">

@@ -7,7 +7,7 @@
         <div class="container text-center">
             <ul class="nav nav-tabs justify-content-center">
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{ route('dailymenus.index') }}">Quản lý thực đơn</a>
+                    <a class="nav-link active" href="{{ route('menus.index') }}">Quản lý thực đơn</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('dishes.index') }}">Quản lý món ăn</a>
@@ -46,47 +46,35 @@
                         <th scope="col">STT</th>
                         <th scope="col">Ngày</th>
                         <th scope="col">Số lượng suất ăn dự kiến</th>
-                        <th scope="col">Các món ăn</th>
-                        <th scope="col">Số lượng suất</th>
+                        <th scope="col">Các món ăn - Số lượng suất</th>
                         <th scope="col">Hành động</th>
                     </tr>
                 </thead>
                 <tbody id="t-body">
-                    @foreach ($dailymenus as $dailymenu)
+                    @foreach ($menus as $menu)
                         <tr>
-                            <td>{{ $dailymenu->id }}</td>
-                            <td>{{ $dailymenu->Date }}</td>
-                            <td>{{ $dailymenu->NumberOfTotalPortions }}</td>
+                            <td>{{ $menu->id }}</td>
+                            <td>{{ $menu->Date }}</td>
+                            <td>{{ $menu->NumberOfTotalPortions }}</td>
                             <td>
                                 <ul>
-                                    @for ($i = 1; $i <= 10; $i++)
-                                        @if (!is_null($dailymenu["Dish{$i}"]))
-                                            <li>{{ $dailymenu["Dish{$i}"]->DishName }}</li>
-                                        @endif
-                                    @endfor
-                                </ul>
-                            </td>
-                            <td>
-                                <ul>
-                                    @for ($i = 1; $i <= 10; $i++)
-                                        @if (!is_null($dailymenu["Dish{$i}"]))
-                                            <li>{{ $dailymenu["NumberOfPortions{$i}"] }}</li>
-                                        @endif
-                                    @endfor
-                                </ul>
+                                    @foreach($menu->dishes()->orderBy('DishName')->get() as $dish)
+                                        <li>{{ $dish->DishName }} - {{ $dish->pivot->NumberOfPortions }}</li>
+                                    @endforeach
+                                </ul>       
                             </td>
                             <td>
                                 <div class="mx-3">
-                                    <a href="{{ route('dailymenus.show', $dailymenu->id) }}"><img src="{{ URL('images/ShowIcon.svg') }}"
+                                    <a href="{{ route('menus.show', $menu->id) }}"><img src="{{ URL('images/ShowIcon.svg') }}"
                                             alt="Show Icon"></a>
-                                    <a href="{{ route('dailymenus.edit', $dailymenu->id) }}"><img src="{{ URL('images/EditIcon.svg') }}"
+                                    <a href="{{ route('menus.edit', $menu->id) }}"><img src="{{ URL('images/EditIcon.svg') }}"
                                             alt="Edit Icon"></a>
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $dailymenu->id }}"><img
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $menu->id }}"><img
                                             src="{{ URL('images/DeleteIcon.svg') }}" alt="Delete Icon"></a>
                                 </div>
                             </td>
                         </tr>
-                        <div class="modal fade" id="deleteModal{{ $dailymenu->id }}" tabindex="-1" aria-labelledby="deleteModalLabel"
+                        <div class="modal fade" id="deleteModal{{ $menu->id }}" tabindex="-1" aria-labelledby="deleteModalLabel"
                             aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -95,11 +83,11 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        Bạn có chắc chắn muốn xóa món ăn này không?
+                                        Bạn có chắc chắn muốn xóa thực đơn này không?
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                        <form method="POST" action="{{ route('dailymenus.destroy', $dailymenu->id) }}">
+                                        <form method="POST" action="{{ route('menus.destroy', $menu->id) }}">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger">Xóa</button>
@@ -112,49 +100,63 @@
                 </tbody>
             </table>
             <div class="container text-center pt-2">
-                <a href="{{ route('dailymenus.create') }}" class="btn btn-warning">Thêm mới thực đơn</a>
+                <a href="#" id="add-menu-link" class="btn btn-warning">Thêm mới thực đơn</a>
             </div>
         </div>
     </section>
 @endsection
 
 @section('script')
-    <script>
-       $(document).ready(function(){
+<script>
+    $(document).ready(function(){
         $("#date").on('change', function(){
             var date = $(this).val();
             $.ajax({
-                url: "{{ route('filter.dailymenus') }}",
+                url: "{{ route('filter.menus') }}",
                 type: "GET",
                 data: {'date': date},
                 success: function(data){
-                    var dailymenus = data.dailymenus;
+                    var menus = data.menus;
                     var html = '';
-                    if (dailymenus.length > 0 ){
-                        for(let i=0; i<dailymenus.length; i++){
+                    if (menus.length > 0) {
+                        $.each(menus, function(index, menu){
+                            var dishesHtml = '';
+                            $.each(menu.dishes, function(index, dish){
+                                dishesHtml += '<li>' + dish.DishName + ' - ' + dish.pivot.NumberOfPortions + '</li>';
+                            });
                             html += '<tr>\
-                                        <td>'+dailymenus[i]['id']+'</td>\
-                                        <td>'+dailymenus[i]['Date']+'</td>\
-                                        <td>'+dailymenus[i]['NumberOfPortions']+'</td>\
+                                        <td>' + menu.id + '</td>\
+                                        <td>' + menu.Date + '</td>\
+                                        <td>' + menu.NumberOfTotalPortions + '</td>\
+                                        <td><ul>' + dishesHtml + '</ul></td>\
                                         <td>\
-                                            <a href="/dailymenus/' + dailymenus[i]['id'] + '"><img src="/images/ShowIcon.svg" alt="Show Icon"></a>\
-                                            <a href="/dailymenus/' + dailymenus[i]['id'] + '/edit"><img src="/images/EditIcon.svg" alt="Edit Icon"></a>\
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#' +
-                                            dailymenus[i]['id'] + '"><img src="/images/DeleteIcon.svg" alt="Delete Icon"></a>\
+                                            <a href="/menus/' + menu.id + '"><img src="{{ URL('images/ShowIcon.svg') }}" alt="Show Icon"></a>\
+                                            <a href="/menus/' + menu.id + '/edit"><img src="{{ URL('images/EditIcon.svg') }}" alt="Edit Icon"></a>\
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal' + menu.id + '"><img src="{{ URL('images/DeleteIcon.svg') }}" alt="Delete Icon"></a>\
                                         </td>\
                                     </tr>';
-                        }
-                    }
-                    else{
+                        });
+                    } else {
                         html += '<tr>\
-                                    <td>Không tìm thấy thực đơn nào</td>\
+                                    <td colspan="5">Không tìm thấy thực đơn nào</td>\
                                 </tr>';
                     }
                     $("#t-body").html(html);
                 }
             });
         });
+        $("#add-menu-link").on('click', function() {
+                var date = $("#date").val();
+                
+                if (!date) {
+                    window.location.href = "{{ route('menus.createWithoutParams') }}";
+                }
+                else {
+                    var url = "{{ route('menus.create', ['date' => ':date']) }}";
+                    url = url.replace(':date', date);
+                    window.location.href = url;
+                }
+            });
     });
-    </script>
-    
-@endsection 
+</script>
+@endsection

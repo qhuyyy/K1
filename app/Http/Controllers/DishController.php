@@ -20,6 +20,27 @@ class DishController extends Controller
         return view('menu.dishes.index', compact('dishes','dishtypes'));
     }
 
+    public function filterDish(Request $request)
+    {
+        $query = Dish::query();
+        $dishtypes = DishType::all();
+
+        if ($request->ajax()) {
+            if ($request->dishtype) {
+                $dishes = $query->with(['dish_type'])
+                                ->where('dishtype_ID', $request->dishtype)
+                                ->get();
+            } else {
+                $dishes = $query->with(['dish_type'])->get();
+            }
+
+            return response()->json(['dishes' => $dishes]);
+        }
+
+        $dishes = $query->with(['dish_type'])->get();
+        
+        return view('menu.dishes.index', compact('dishes', 'dishtypes'));
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -30,7 +51,7 @@ class DishController extends Controller
         $ingredients = Ingredient::all();
 
         return view('menu.dishes.create', compact('dishtypes','ingredients'));
-     }
+     } 
 
     public function create()
     {
@@ -117,7 +138,7 @@ class DishController extends Controller
             $dish->ingredients()->detach();
         }
 
-        return redirect()->route('dishes.index')->with('success', 'Món ăn đã được cập nhật thành công!');
+        return redirect()->route('dishes.index');
     }
 
     /**
