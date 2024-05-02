@@ -45,7 +45,7 @@
                                 <div id="dish_{{ $index }}" class="mb-3">
                                     <div class="row mb-3">
                                         <div class="col-md-5">
-                                            <label for="dish_{{ $index }}" class="form-label">Món ăn</label>
+                                            <label for="dish_{{ $index }}" class="form-label h5">Món ăn</label>
                                             <select class="form-select" id="dish_{{ $index }}" name="dishes[{{ $index }}][id]" onchange="getIngredients({{ $index }})">
                                                 <option value="">- Chọn món ăn -</option>
                                                 @foreach ($dishes as $dishOption)
@@ -201,6 +201,8 @@
                 currency: 'VND'
             });
             updateTotalFoodPurchase();
+
+            
         });
 
         document.getElementById('add-dish').addEventListener('click', function() {
@@ -211,7 +213,7 @@
             div.innerHTML = `
                 <div class="row">
                     <div class="col-md-5">
-                        <label for="dish_${index}" class="form-label">Món ăn</label>
+                        <label for="dish_${index}" class="form-label h5">Món ăn</label>
                         <select class="form-select" id="dish_${index}" name="dishes[${index}][id]" onchange="getIngredients(${index})">
                             <option value="">- Chọn món ăn -</option>
                             @foreach ($dishes as $dish)

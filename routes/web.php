@@ -8,6 +8,7 @@ use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\DishController;
 use App\Http\Controllers\DishTypeController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\RevenueController;
 
 
 
@@ -37,3 +38,6 @@ Route::resource('menus',MenuController::class);
 Route::get('/filter-menus', [MenuController::class, 'filterMenu'])->name('filter.menus');
 Route::get('menus/create', [MenuController::class, 'createWithoutParams'])->name('menus.createWithoutParams');
 Route::get('menus/create/{date}', [MenuController::class, 'create'])->name('menus.create');
+
+Route::resource('revenues',RevenueController::class);
+Route::get('/filter-revenues', [RevenueController::class, 'filterRevenue'])->name('filter.revenues');
