@@ -28,9 +28,9 @@ class MenuController extends Controller
 
         if ($request->ajax()) {
             if (!empty($request->date)){
-                $menus = $query->where('Date', $request->date)->get();
+                $menus = $query->with('dishes')->where('Date', $request->date)->get();
             } else {
-                $menus = $query->get();
+                $menus = $query->with('dishes')->get();
             }
             return response()->json(['menus' => $menus]);
         }

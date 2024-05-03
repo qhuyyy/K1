@@ -120,11 +120,17 @@
                         var html = '';
                         if(dishes.length > 0){
                             for (let i = 0; i<dishes.length; i++){
+                                var ingredientsHtml = '<ul>';
+                                for (let j = 0; j < dishes[i].ingredients.length; j++) {
+                                    ingredientsHtml += '<li>' + dishes[i].ingredients[j].IngredientName + '</li>';
+                                }
+                                ingredientsHtml += '</ul>';
+
                                 html += '<tr>\
                                             <td>' + dishes[i]['id'] + '</td>\
                                             <td>' + dishes[i]['DishName'] + '</td>\
                                             <td>' + (dishes[i]['dish_type'] ? dishes[i]['dish_type']['DishTypeName'] : '') + '</td>\
-                                            <td></td>\
+                                            <td>' + ingredientsHtml + '</td>\
                                             <td>\
                                                 <div class="mx-3">\
                                                     <a href="/dishes/' + dishes[i]['id'] + '"><img src="{{ URL('images/ShowIcon.svg') }}" alt="Show Icon"></a>\
@@ -142,7 +148,7 @@
                         }
                         $("#t-body").html(html);
                     }
-                })
+                });
             })
 
             $("#add-dish-link").on('click', function() {

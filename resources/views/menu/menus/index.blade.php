@@ -22,14 +22,11 @@
         </div> 
         <div class="container">
             <div class="row">
-                <div class="text-center pt-2">
-                    <h2>Bộ lọc</h2>
-                </div>
                 <div class="col-md-3">
                     <div class="mb-3">
                         <label for="date" class="form-label">Ngày</label>
                         <select class="form-select" name="date" id="date">
-                            <option value="">Chọn ngày</option>
+                            <option value="">Tất cả các ngày</option>
                             @foreach ($dates as $date)
                                 <option value="{{ $date }}">{{ $date }}</option>
                             @endforeach
@@ -107,45 +104,48 @@
 @endsection
 
 @section('script')
-<script>
-    $(document).ready(function(){
-        $("#date").on('change', function(){
-            var date = $(this).val();
-            $.ajax({
-                url: "{{ route('filter.menus') }}",
-                type: "GET",
-                data: {'date': date},
-                success: function(data){
-                    var menus = data.menus;
-                    var html = '';
-                    if (menus.length > 0) {
-                        $.each(menus, function(index, menu){
-                            var dishesHtml = '';
-                            $.each(menu.dishes, function(index, dish){
-                                dishesHtml += '<li>' + dish.DishName + ' - ' + dish.pivot.NumberOfPortions + '</li>';
-                            });
+    <script>
+        $(document).ready(function(){
+            $("#date").on('change', function(){
+                var date = $(this).val();
+                $.ajax({
+                    url: "{{ route('filter.menus') }}",
+                    type: "GET",
+                    data: {'date': date},
+                    success: function(data){
+                        var menus = data.menus;
+                        var html = '';
+                        if (menus.length > 0) {
+                            for (let i = 0; i < menus.length; i++){
+                                var menu = menus[i];
+                                var dishesHtml = '<ul>';
+                                for (let j = 0; j < menu.dishes.length; j++) {
+                                    dishesHtml += '<li>' + menu.dishes[j].DishName + ' - ' + menu.dishes[j].pivot.NumberOfPortions + '</li>';
+                                }
+                                dishesHtml += '</ul>';
+                                html += '<tr>\
+                                            <td>' + menu.id + '</td>\
+                                            <td>' + menu.Date + '</td>\
+                                            <td>' + menu.NumberOfTotalPortions + '</td>\
+                                            <td>' + dishesHtml + '</td>\
+                                            <td>\
+                                                <a href="/menus/' + menu.id + '"><img src="{{ URL('images/ShowIcon.svg') }}" alt="Show Icon"></a>\
+                                                <a href="/menus/' + menu.id + '/edit"><img src="{{ URL('images/EditIcon.svg') }}" alt="Edit Icon"></a>\
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal' + menu.id + '"><img src="{{ URL('images/DeleteIcon.svg') }}" alt="Delete Icon"></a>\
+                                            </td>\
+                                        </tr>';
+                            }
+                        } else {
                             html += '<tr>\
-                                        <td>' + menu.id + '</td>\
-                                        <td>' + menu.Date + '</td>\
-                                        <td>' + menu.NumberOfTotalPortions + '</td>\
-                                        <td><ul>' + dishesHtml + '</ul></td>\
-                                        <td>\
-                                            <a href="/menus/' + menu.id + '"><img src="{{ URL('images/ShowIcon.svg') }}" alt="Show Icon"></a>\
-                                            <a href="/menus/' + menu.id + '/edit"><img src="{{ URL('images/EditIcon.svg') }}" alt="Edit Icon"></a>\
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal' + menu.id + '"><img src="{{ URL('images/DeleteIcon.svg') }}" alt="Delete Icon"></a>\
-                                        </td>\
+                                        <td colspan="5">Không tìm thấy thực đơn nào</td>\
                                     </tr>';
-                        });
-                    } else {
-                        html += '<tr>\
-                                    <td colspan="5">Không tìm thấy thực đơn nào</td>\
-                                </tr>';
+                        }
+                        $("#t-body").html(html);
                     }
-                    $("#t-body").html(html);
-                }
+                });
             });
-        });
-        $("#add-menu-link").on('click', function() {
+
+            $("#add-menu-link").on('click', function() {
                 var date = $("#date").val();
                 
                 if (!date) {
@@ -157,6 +157,6 @@
                     window.location.href = url;
                 }
             });
-    });
-</script>
+        });
+    </script>
 @endsection

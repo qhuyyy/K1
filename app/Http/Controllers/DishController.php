@@ -28,16 +28,16 @@ class DishController extends Controller
         if ($request->ajax()) {
             if ($request->dishtype) {
                 $dishes = $query->with(['dish_type'])
-                                ->where('dishtype_ID', $request->dishtype)
+                                ->with('ingredients')->where('dishtype_ID', $request->dishtype)
                                 ->get();
             } else {
-                $dishes = $query->with(['dish_type'])->get();
+                $dishes = $query->with('ingredients')->with(['dish_type'])->get();
             }
 
             return response()->json(['dishes' => $dishes]);
         }
 
-        $dishes = $query->with(['dish_type'])->get();
+        $dishes = $query->with('ingredients')->with(['dish_type'])->get();
         
         return view('menu.dishes.index', compact('dishes', 'dishtypes'));
     }
