@@ -39,9 +39,8 @@
                                 <li><a class="dropdown-item" href="{{ route('menus.index') }}">Quản lý thực đơn</a></li>
                             </ul>
                         </li>
-                        <a class="btn btn-warning d-flex align-items-center gap-2">
-                            <img src="{{ URL('images/LoginIcon.svg') }}" alt="Logo Login" width="18.75px"
-                                height="18.75px" />
+                        <a class="btn btn-warning d-flex align-items-center gap-2" style="width:180px">
+                            <img src="{{ URL('images/LoginIcon.svg') }}" alt="Logo Login"/>
                             <span>Người dùng</span>
                         </a>
                     </div>

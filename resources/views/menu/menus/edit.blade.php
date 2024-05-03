@@ -30,7 +30,7 @@
                                         name="NumberOfTotalPortions" value="{{ $menu->NumberOfTotalPortions }}" placeholder="Nhập số lượng suất ăn">
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="TotalFoodCost" class="form-label">Tổng số tiền tối đa thực phẩm dự kiến</label>
+                                    <label for="TotalFoodCost" class="form-label">Tổng số tiền mua thực phẩm tối đa </label>
                                     <input type="text" class="form-control" id="TotalFoodCost" name="TotalFoodCost"
                                         value="{{ number_format($menu->NumberOfTotalPortions * 25000 * 0.4, 0, ',', '.') }}" placeholder="Nhập số lượng suất ăn" readonly>
                                 </div>
@@ -43,60 +43,64 @@
                         <div id="dishes-container">
                             @foreach ($menu->dishes as $index => $dish)
                                 <div id="dish_{{ $index }}" class="mb-3">
-                                    <div class="row mb-3">
-                                        <div class="col-md-5">
-                                            <label for="dish_{{ $index }}" class="form-label h5">Món ăn</label>
-                                            <select class="form-select" id="dish_{{ $index }}" name="dishes[{{ $index }}][id]" onchange="getIngredients({{ $index }})">
-                                                <option value="">- Chọn món ăn -</option>
-                                                @foreach ($dishes as $dishOption)
-                                                    <option value="{{ $dishOption->id }}" @if ($dish->id == $dishOption->id) selected @endif>{{ $dishOption->DishName }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label for="numberofportions_{{ $index }}" class="form-label">Số lượng suất</label>
-                                            <input class="form-control soluong" type="text" name="dishes[{{ $index }}][numberOfPortions]" id="numberofportions_{{ $index }}" value="{{ $dish->pivot->NumberOfPortions }}" onchange="updateSoLuong()">
-                                        </div>
-                                        @php
-                                            $totalEstimatedValue = 0;
-                                            foreach ($dish->ingredients as $ingredient) {
-                                                $totalEstimatedValue += $ingredient->Price * $ingredient->pivot->Amount;
-                                            }
-                                            $totalPrice = $totalEstimatedValue * $dish->pivot->NumberOfPortions / 10;
-                                        @endphp
-                                        <div class="col-md-2">
-                                            <label for="price_{{ $index }}" class="form-label">Giá trị ước tính</label>
-                                            <input class="form-control giatriuoctinh" type="text" id="price_{{ $index }}" name="dishes[{{ $index }}][price]" value="{{ $totalEstimatedValue}}" readonly>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label for="totalEstimatedValue_{{ $index }}" class="form-label">Tổng tiền </label>
-                                            <input class="form-control ketqua" type="text" id="totalEstimatedValue_{{ $index }}" name="dishes[{{ $index }}][totalEstimatedValue]" value="{{ $totalPrice}}" readonly>
-                                        </div>
-                                    </div>
-                                    <div id="ingredient-list_{{ $index }}">
-                                        @foreach ($dish->ingredients as $ingredient)
+                                    <div class="row">
+                                        <div class="col-md-11">
                                             <div class="row mb-3">
-                                                <div class="col-md-4">
-                                                    <label for="ingredient-list" class="form-label">Nguyên liệu tương ứng</label>
-                                                    <input class="form-control" type="text" value="{{ $ingredient->IngredientName }}" readonly>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <label for="ingredient-list" class="form-label">Đơn giá</label>
-                                                    <input class="form-control" type="text" value="{{ $ingredient->Price }}" readonly>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <label for="ingredient-list" class="form-label">Định lượng cho 10 suất</label>
-                                                    <input class="form-control" type="text" value="{{ $ingredient->pivot->Amount !== null ? $ingredient->pivot->Amount : 0 }}" readonly>
+                                                <div class="col-md-5">
+                                                    <label for="dish_{{ $index }}" class="form-label h5">Món ăn</label>
+                                                    <select class="form-select" id="dish_{{ $index }}" name="dishes[{{ $index }}][id]" onchange="getIngredients({{ $index }})">
+                                                        <option value="">- Chọn món ăn -</option>
+                                                        @foreach ($dishes as $dishOption)
+                                                            <option value="{{ $dishOption->id }}" @if ($dish->id == $dishOption->id) selected @endif>{{ $dishOption->DishName }}</option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                                 <div class="col-md-2">
-                                                    <label for="ingredient-list" class="form-label">Tổng cộng</label>
-                                                    <input class="form-control" type="text" value="{{ $ingredient->Price * $ingredient->pivot->Amount }}" readonly>
+                                                    <label for="numberofportions_{{ $index }}" class="form-label">Số lượng suất</label>
+                                                    <input class="form-control soluong" type="text" name="dishes[{{ $index }}][numberOfPortions]" id="numberofportions_{{ $index }}" value="{{ $dish->pivot->NumberOfPortions }}" onchange="updateSoLuong()">
+                                                </div>
+                                                @php
+                                                    $totalEstimatedValue = 0;
+                                                    foreach ($dish->ingredients as $ingredient) {
+                                                        $totalEstimatedValue += $ingredient->Price * $ingredient->pivot->Amount;
+                                                    }
+                                                    $totalPrice = $totalEstimatedValue * $dish->pivot->NumberOfPortions / 10;
+                                                @endphp
+                                                <div class="col-md-2">
+                                                    <label for="price_{{ $index }}" class="form-label">Giá trị ước tính</label>
+                                                    <input class="form-control giatriuoctinh" type="text" id="price_{{ $index }}" name="dishes[{{ $index }}][price]" value="{{ $totalEstimatedValue }}" readonly>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="totalEstimatedValue_{{ $index }}" class="form-label">Tổng tiền </label>
+                                                    <input class="form-control ketqua" type="text" id="totalEstimatedValue_{{ $index }}" name="dishes[{{ $index }}][totalEstimatedValue]" value="{{ $totalPrice }}" readonly>
                                                 </div>
                                             </div>
-                                        @endforeach
-                                    </div>
-                                    <div class="col-md-1">
-                                        <button type="button" class="btn btn-danger" onclick="removeDish({{ $index }})">Xóa</button>
+                                            <div id="ingredient-list_{{ $index }}">
+                                                @foreach ($dish->ingredients as $ingredient)
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-4">
+                                                            <label for="ingredient-list" class="form-label">Nguyên liệu tương ứng</label>
+                                                            <input class="form-control" type="text" value="{{ $ingredient->IngredientName }}" readonly>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label for="ingredient-list" class="form-label">Đơn giá</label>
+                                                            <input class="form-control" type="text" value="{{ $ingredient->Price }}" readonly>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label for="ingredient-list" class="form-label">Định lượng cho 10 suất</label>
+                                                            <input class="form-control" type="text" value="{{ $ingredient->pivot->Amount !== null ? $ingredient->pivot->Amount : 0 }}" readonly>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label for="ingredient-list" class="form-label">Tổng cộng</label>
+                                                            <input class="form-control" type="text" value="{{ $ingredient->Price * $ingredient->pivot->Amount }}" readonly>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 d-flex align-items-start justify-content-start" style="margin-top: 2.3rem;">
+                                            <button type="button" class="btn btn-danger" onclick="removeDish({{ $index }})">Xóa</button>
+                                        </div>
                                     </div>
                                 </div>
                             @endforeach
@@ -109,7 +113,7 @@
                     </div>
                     <div class="container d-flex justify-content-center align-items-center pt-2">
                         <div class="text-center pb-2 mx-2">
-                            <a href="{{ route('menus.index') }}" class="btn btn-warning" style="width:98.89px">
+                            <a href="{{ route('menus.index') }}" class="btn btn-warning">
                                 Quay lại</a>
                         </div>
                         <div class="text-center pb-2 mx-2">
@@ -213,35 +217,39 @@
             var div = document.createElement('div');
             div.classList.add('mb-3');
             div.innerHTML = `
-                <div class="row">
-                    <div class="col-md-5">
-                        <label for="dish_${index}" class="form-label h5">Món ăn</label>
-                        <select class="form-select" id="dish_${index}" name="dishes[${index}][id]" onchange="getIngredients(${index})">
-                            <option value="">- Chọn món ăn -</option>
-                            @foreach ($dishes as $dish)
-                                <option value="{{ $dish->id }}">{{ $dish->DishName }}</option>
-                            @endforeach
-                        </select>
+            <div class="row">
+                <div class="col-md-11">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <label for="dish_${index}" class="form-label h5">Món ăn</label>
+                            <select class="form-select" id="dish_${index}" name="dishes[${index}][id]" onchange="getIngredients(${index})">
+                                <option value="">- Chọn món ăn -</option>
+                                @foreach ($dishes as $dish)
+                                    <option value="{{ $dish->id }}">{{ $dish->DishName }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="numberofportions_${index}" class="form-label">Số lượng suất</label>
+                            <input class="form-control soluong" type="text" name="dishes[${index}][numberOfPortions]" id="numberofportions_${index}" onchange="updateSoLuong()">
+                        </div>   
+                        <div class="col-md-2">
+                            <label for="price_${index}" class="form-label">Giá trị ước tính</label>
+                            <input class="form-control giatriuoctinh" type="text" id="price_${index}" name="dishes[${index}][price]" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="totalEstimatedValue_${index}" class="form-label">Tổng tiền </label>
+                            <input class="form-control ketqua" type="text" id="totalEstimatedValue_${index}" name="dishes[${index}][totalEstimatedValue]" readonly>
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <label for="numberofportions_${index}" class="form-label">Số lượng suất</label>
-                        <input class="form-control soluong" type="text" name="dishes[${index}][numberOfPortions]" id="numberofportions_${index}" onchange="updateSoLuong()">
-                    </div>   
-                    <div class="col-md-2">
-                        <label for="price_${index}" class="form-label">Giá trị ước tính</label>
-                        <input class="form-control giatriuoctinh" type="text" id="price_${index}" name="dishes[${index}][price]" readonly>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="totalEstimatedValue_${index}" class="form-label">Tổng tiền </label>
-                        <input class="form-control ketqua" type="text" id="totalEstimatedValue_${index}" name="dishes[${index}][totalEstimatedValue]" readonly>
+                    <div class="row">
+                        <div id="ingredient-list_${index}"></div>
                     </div>
                 </div>
-                <div class="row">
-                    <div id="ingredient-list_${index}"></div>
-                </div>
-                <div class="col-md-1">
+                <div class="col-md-1 d-flex align-items-start justify-content-start" style="margin-top: 2.3rem;">
                     <button type="button" class="btn btn-danger" onclick="removeDish(${index})">Xóa</button>
                 </div>
+            </div>
             `;
 
             container.appendChild(div);

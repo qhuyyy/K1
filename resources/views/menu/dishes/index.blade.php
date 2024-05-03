@@ -22,14 +22,11 @@
         </div>  
         <div class="container">
             <div class="row">
-                <div class="text-center pt-2">
-                    <h2>Bộ lọc</h2>
-                </div>
                 <div class="col-md-3">
                     <div class="mb-3">
-                        <label for="dishtype" class="form-label">Loại món ăn</label>
+                        <label for="dishtype" class="form-label h5">Loại món ăn</label>
                         <select class="form-select" name="dishtype" id="dishtype">
-                            <option value="">Chọn loại món ăn</option>
+                            <option value="">Tất cả các loại món ăn</option>
                             @foreach ($dishtypes as $dishtype)
                                 <option value="{{ $dishtype['id'] }}">{{ $dishtype->DishTypeName }}</option>
                             @endforeach
@@ -64,7 +61,7 @@
                                 </ul>       
                             </td>
                             <td>
-                                <div class="mx-3">
+                                <div>
                                     <a href="{{ route('dishes.show', $dish->id) }}"><img src="{{ URL('images/ShowIcon.svg') }}"
                                             alt="Show Icon"></a>
                                     <a href="{{ route('dishes.edit', $dish->id) }}"><img src="{{ URL('images/EditIcon.svg') }}"

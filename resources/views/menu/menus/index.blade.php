@@ -24,7 +24,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="mb-3">
-                        <label for="date" class="form-label">Ngày</label>
+                        <label for="date" class="form-label h5">Ngày</label>
                         <select class="form-select" name="date" id="date">
                             <option value="">Tất cả các ngày</option>
                             @foreach ($dates as $date)
@@ -61,7 +61,7 @@
                                 </ul>       
                             </td>
                             <td>
-                                <div class="mx-3">
+                                <div>
                                     <a href="{{ route('menus.show', $menu->id) }}"><img src="{{ URL('images/ShowIcon.svg') }}"
                                             alt="Show Icon"></a>
                                     <a href="{{ route('menus.edit', $menu->id) }}"><img src="{{ URL('images/EditIcon.svg') }}"

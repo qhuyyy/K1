@@ -42,7 +42,7 @@
                             <td>{{ number_format($ingredient->Price, 0, ',', '.') }}</td>
                             <td>{{ $ingredient->unit->UnitName}}</td>
                             <td>
-                                <div class="mx-3">
+                                <div>
                                     <a href="{{ route('ingredients.show', $ingredient->id) }}"><img
                                             src="{{ URL('images/ShowIcon.svg') }}" alt="Show Icon"></a>
                                     <a href="{{ route('ingredients.edit', $ingredient->id) }}"><img

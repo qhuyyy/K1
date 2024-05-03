@@ -39,7 +39,7 @@
                                 <td>{{ $dishtype->id }}</td>
                                 <td>{{ $dishtype->DishTypeName }}</td>
                                 <td>
-                                    <div class="mx-3">
+                                    <div>
                                         <a href="{{ route('dishtypes.show', $dishtype->id) }}"><img
                                                 src="{{ URL('images/ShowIcon.svg') }}" alt="Show Icon"></a>
                                         <a href="{{ route('dishtypes.edit', $dishtype->id) }}"><img

@@ -55,8 +55,7 @@
                                         <label for="unit{{ $index }}" class="form-label">Đơn vị tính</label>
                                         <input class="form-control" type="text" name="unit[]" id="unit{{ $index }}" readonly value="{{ $dishIngredient->unit->UnitName ?? 'chưa có giá trị' }}">
                                     </div>
-                                    <div class="col-md-1 d-flex align-items-center justify-content-bottom">
-                                        <label for="form-label"></label>
+                                    <div class="col-md-1 d-flex align-items-end justify-content-end">
                                         <button type="button" class="btn btn-danger" onclick="removeIngredientRow(this)">Xóa</button>
                                     </div>
                                 </div>
@@ -76,7 +75,7 @@
                     </div>
                     <div class="container d-flex justify-content-center align-items-center pt-2">
                         <div class="text-center pb-2 mx-2">
-                            <a href="{{ route('dishes.index') }}" class="btn btn-warning" style="width:98.89px">
+                            <a href="{{ route('dishes.index') }}" class="btn btn-warning">
                                 Quay lại</a>
                         </div>
                         <div class="text-center pb-2 mx-2">
@@ -115,8 +114,7 @@
                         <label for="unit${index}" class="form-label">Đơn vị tính</label>
                         <input class="form-control" type="text" name="unit[]" id="unit${index}" readonly>
                     </div>
-                    <div class="col-md-1 d-flex align-items-center justify-content-bottom">
-                        <label for="form-label"></label>
+                    <div class="col-md-1 d-flex align-items-end justify-content-end">
                         <button type="button" class="btn btn-danger" onclick="removeIngredientRow(this)">Xóa</button>
                     </div>
                 </div>

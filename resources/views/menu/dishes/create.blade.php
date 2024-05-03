@@ -42,9 +42,6 @@
                             <div class="col-md-3">
                                 <button type="button" id="add-ingredient" class="btn btn-info">Thêm nguyên liệu</button>
                             </div>
-                            <div class="col-md-3">
-                                <button type="button" id="remove-ingredient" class="btn btn-danger">Bớt nguyên liệu</button>
-                            </div>
                         </div>
                     </div>
                     <div class="text-center">
@@ -53,7 +50,7 @@
                     </div>
                     <div class="container d-flex justify-content-center align-items-center pt-2">
                         <div class="text-center pb-2 mx-2">
-                            <a href="{{ route('dishes.index') }}" class="btn btn-warning" style="width:98.89px">
+                            <a href="{{ route('dishes.index') }}" class="btn btn-warning">
                                 Quay lại</a>
                         </div>
                         <div class="text-center pb-2 mx-2">
@@ -74,7 +71,7 @@
             div.classList.add('mb-3');
             div.innerHTML = `
                 <div class="row">
-                    <div class="col-md-7">
+                    <div class="col-md-6">
                         <label for="ingredient" class="form-label">Nguyên liệu</label>
                         <select class="form-select" name="ingredient[]" onchange="updateUnit(this)">
                             <option value="">- Chọn nguyên liệu -</option>
@@ -91,18 +88,18 @@
                         <label for="unit" class="form-label">Đơn vị tính</label>
                         <input class="form-control" type="text" name="unit[]" id="unit" readonly>
                     </div>
+                    <div class="col-md-1 d-flex align-items-end justify-content-end">
+                        <button type="button" class="btn btn-danger" onclick="removeIngredientRow(this)">Xóa</button>
+                    </div>
                 </div>
             `;
             container.appendChild(div);
         });
 
-        document.getElementById('remove-ingredient').addEventListener('click', function() {
-            var container = document.getElementById('ingredients-container');
-            var children = container.getElementsByClassName('mb-3');
-            if (children.length > 1) {
-                container.removeChild(children[children.length - 1]);
-            }
-        });
+        function removeIngredientRow(button) {
+            var row = button.parentElement.parentElement;
+            row.parentElement.removeChild(row);
+        }
 
         function updateUnit(select) {
             var selectedOption = select.options[select.selectedIndex];
