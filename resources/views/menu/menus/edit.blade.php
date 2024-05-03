@@ -141,7 +141,9 @@
             document.querySelectorAll('.soluong').forEach((item) => {
                 arraySoLuong.push(item.value);
             });
-
+            updateArray();
+            console.log('GiaTriUocTinh',arrayUocTinh);
+            console.log('SoLuong',arraySoLuong);
             const arrayTotal = arrayUocTinh.map((value, index) => Number(value) / 10 * Number(arraySoLuong[index]));
             document.querySelectorAll('.ketqua').forEach((item, i) => {
                 item.value = !isNaN(arrayTotal[i]) ? arrayTotal[i] : '';
@@ -246,8 +248,6 @@
             createNewIngredientList(index);
             
             updateArray();
-            console.log(arrayUocTinh);
-            const array = [];
         });         
         
 

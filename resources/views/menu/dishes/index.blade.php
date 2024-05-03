@@ -124,7 +124,7 @@
                                             <td>' + dishes[i]['id'] + '</td>\
                                             <td>' + dishes[i]['DishName'] + '</td>\
                                             <td>' + (dishes[i]['dish_type'] ? dishes[i]['dish_type']['DishTypeName'] : '') + '</td>\
-                                            <td>abc</td>\
+                                            <td></td>\
                                             <td>\
                                                 <div class="mx-3">\
                                                     <a href="/dishes/' + dishes[i]['id'] + '"><img src="{{ URL('images/ShowIcon.svg') }}" alt="Show Icon"></a>\
