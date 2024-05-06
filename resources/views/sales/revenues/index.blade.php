@@ -80,7 +80,7 @@
                             <td>{{ $revenue->BankTransfer }}</td>
                             <td>{{ $revenue->Total }}</td>
                             <td>
-                                <div class="mx-3">
+                                <div>
                                     <a href="{{ route('revenues.show', $revenue->id) }}"><img
                                             src="{{ URL('images/ShowIcon.svg') }}" alt="Show Icon"></a>
                                     <a href="{{ route('revenues.edit', $revenue->id) }}"><img
