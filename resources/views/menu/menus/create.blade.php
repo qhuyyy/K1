@@ -167,7 +167,6 @@
             
             updateArray();
             console.log(arrayUocTinh);
-            const array = [];
         });         
         
 

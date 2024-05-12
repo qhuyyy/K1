@@ -8,8 +8,9 @@ use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\DishController;
 use App\Http\Controllers\DishTypeController;
 use App\Http\Controllers\MenuController;
-use App\Http\Controllers\RevenueController;
-
+use App\Http\Controllers\BillController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductTypeController;
 
 
 Route::get('/', function () {
@@ -39,5 +40,10 @@ Route::get('/filter-menus', [MenuController::class, 'filterMenu'])->name('filter
 Route::get('menus/create', [MenuController::class, 'createWithoutParams'])->name('menus.createWithoutParams');
 Route::get('menus/create/{date}', [MenuController::class, 'create'])->name('menus.create');
 
-Route::resource('revenues',RevenueController::class);
-Route::get('/filter-revenues', [RevenueController::class, 'filterRevenue'])->name('filter.revenues');
+Route::resource('bills',BillController::class);
+Route::get('/filter-bills', [BillController::class, 'filterBill'])->name('filter.bills');
+Route::get('bills/create', [BillController::class, 'createWithoutParams'])->name('bills.createWithoutParams');
+Route::get('bills/create/{date}', [BillController::class, 'create'])->name('bills.create');
+
+Route::resource('products',ProductController::class);
+Route::resource('producttypes',ProductTypeController::class);
