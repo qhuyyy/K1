@@ -28,12 +28,9 @@
                             <div class="mb-3">
                                 <div class="row mb-3">
                                     <div class="col-md-3">
-                                        <label for="product_{{ $index }}" class="form-label">
-                                            @if ($product->product_type->ProductTypeName == 'Cơm suất')
-                                                Loại suất
-                                            @elseif ($product->product_type->ProductTypeName == 'Đồ ăn nhanh')
-                                                Tên món
-                                            @endif
+                                        <label for="product{{ $index }}" class="form-label"
+                                            data-product-type="{{ $product->product_type->ProductTypeName }}">
+                                            {{ $product->product_type->ProductTypeName }}
                                         </label>
                                         <select class="form-select product" id="product_{{ $index }}"
                                             name="products[{{ $index }}][id]"
@@ -52,6 +49,13 @@
                                                 @elseif (
                                                     $product->product_type->ProductTypeName == 'Đồ ăn nhanh' &&
                                                         $productOption->product_type->ProductTypeName == 'Đồ ăn nhanh')
+                                                    <option value="{{ $productOption->id }}"
+                                                        data-product-price="{{ $productOption->Price }}"
+                                                        data-product-id="{{ $productOption->id }}"
+                                                        @if ($product->id == $productOption->id) selected @endif>
+                                                        {{ $productOption->ProductName }}
+                                                    </option>
+                                                @elseif ($product->product_type->ProductTypeName == 'Cơm mâm' && $productOption->product_type->ProductTypeName == 'Cơm mâm')
                                                     <option value="{{ $productOption->id }}"
                                                         data-product-price="{{ $productOption->Price }}"
                                                         data-product-id="{{ $productOption->id }}"
@@ -84,19 +88,27 @@
                                     </div>
                                     <div class="col-md-1 d-flex align-items-end justify-content-end mx-0">
                                         <button type="button" class="btn btn-danger"
-                                            onclick="removeProduct({{ $index }})">Xóa</button>
+                                            onclick="removeProduct(this)">Xóa</button>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
-                    </div>      
+                    </div>
                     <div class="mb-3 d-flex justify-content-center align-items-center">
                         <div class="text-center mx-2">
                             <button type="button" id="add-product" class="btn btn-info">Thêm suất cơm mới</button>
                         </div>
                         <div class="text-center mx-2">
+                            <button type="button" id="add-combo" class="btn btn-info">Thêm mâm cơm mới</button>
+                        </div>
+                        <div class="text-center mx-2">
                             <button type="button" id="add-fastfood" class="btn btn-info">Thêm món ăn nhanh</button>
                         </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Gọi thêm đồ</label>
+                        <input type="text" class="form-control Extra" id="Extra" name="Extra" placeholder="0" value="{{ $bill->Extra }}"
+                            onchange="updateTotal()">
                     </div>
                     <div class="mb-3">
                         <label for="formGroupExampleInput" class="form-label">Tổng cộng</label>
@@ -140,6 +152,7 @@
             });
             console.log('Đơn giá: ', arrayPrice);
             updateSubTotal(); // Gọi hàm cập nhật tổng sau khi cập nhật giá
+            updateTotal();
         }
 
         function updateArrayQuantity() {
@@ -174,13 +187,14 @@
 
         function updateTotal() {
             let total = 0;
+            let extraValue = parseFloat(document.getElementById('Extra').value) || 0; // Sửa đổi id thành 'Extra'
             // Lặp qua mỗi sản phẩm để tính tổng
             document.querySelectorAll('.subtotal').forEach(function(subtotalInput) {
                 total += parseFloat(subtotalInput.value) || 0; // Chuyển đổi giá trị sang số và cộng vào tổng
             });
+            total += extraValue;
             document.getElementById('totalInput').value = total; // Cập nhật giá trị tổng vào input "Tổng cộng"
         }
-
 
         function updateProductID() {
             arrayProductId = [];
@@ -201,7 +215,7 @@
             div.innerHTML = `
             <div class="row mb-3">
                 <div class="col-md-3">
-                    <label for="product_${index}" class="form-label">Loại suất</label>
+                    <label for="product_${index}" class="form-label">Cơm suất</label>
                     <select class="form-select product" id="product_${index}" name="products[${index}][id]" onchange="updateProductDetails(this),updateProductID()">
                         <option value="">- Chọn loại suất -</option>
                         @foreach ($products as $product)
@@ -231,7 +245,7 @@
                 </div>
                 <div class="col-md-1 d-flex align-items-end justify-content-end mx-0">
                                         <button type="button" class="btn btn-danger"
-                                            onclick="removeProduct({{ $index }})">Xóa</button>
+                                        onclick="removeProduct(this)">Xóa</button>
                                     </div>
             </div>
             `;
@@ -246,7 +260,7 @@
             div.innerHTML = `
             <div class="row mb-3 pb-2">
                                     <div class="col-md-3">
-                                        <label for="product_${index}" class="form-label">Chọn món ăn nhanh</label>
+                                        <label for="product_${index}" class="form-label">Đồ ăn nhanh</label>
                                         <select class="form-select product" id="product_${index}"
                                             name="products[${index}][id]"
                                             onchange="updateProductDetails(this),updateProductID(),updateTotal()">
@@ -280,13 +294,62 @@
                                     </div>
                                     <div class="col-md-1 d-flex align-items-end justify-content-end mx-0">
                                         <button type="button" class="btn btn-danger"
-                                            onclick="removeProduct(${index})">Xóa</button>
+                                        onclick="removeProduct(this)">Xóa</button>
                                     </div>
                                 </div>
             `;
             container.appendChild(div);
         });
-        
+
+        document.getElementById('add-combo').addEventListener('click', function() {
+            var container = document.querySelector('.products-container');
+            var index = container.getElementsByClassName('mb-3').length;
+            var div = document.createElement('div');
+            div.classList.add('mb-3');
+            div.innerHTML = `
+            <div class="row mb-3 pb-2">
+                                    <div class="col-md-3">
+                                        <label for="product_${index}" class="form-label">Cơm mâm</label>
+                                        <select class="form-select product" id="product_${index}"
+                                            name="products[${index}][id]"
+                                            onchange="updateProductDetails(this),updateProductID()">
+                                            <option value="">- Chọn sản phẩm -</option>
+                                            @foreach ($products as $product)
+                                                @if ($product->product_type->ProductTypeName == 'Cơm mâm')
+                                                    <option value="{{ $product->id }}"
+                                                        data-product-price="{{ $product->Price }}"
+                                                        data-product-id="{{ $product->id }}">
+                                                        {{ $product->ProductName }}
+                                                    </option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="price_${index}" class="form-label">Đơn giá</label>
+                                        <input class="form-control price" type="text" id="price_${index}"
+                                            placeholder="Đơn giá được tự động cập nhật" onchange="updateTotal()" readonly>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="quantity_${index}" class="form-label">Số lượng</label>
+                                        <input class="form-control quantity" type="text" id="quantity_${index}"
+                                            name="products[${index}][quantity]"
+                                            onchange="updateArrayQuantity(),updateTotal()">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="subtotal_${index}" class="form-label">Tổng</label>
+                                        <input class="form-control subtotal" type="text" id="subtotal_${index}"
+                                            name="products[${index}][subtotal]" value="0" readonly>
+                                    </div>
+                                    <div class="col-md-1 d-flex align-items-end justify-content-end mx-0">
+                                        <button type="button" class="btn btn-danger"
+                                            onclick="removeProduct(this)">Xóa</button>
+                                    </div>
+                                </div>
+            `;
+            container.appendChild(div);
+        });
+
         function updateProductDetails(select) {
             var selectedOption = select.options[select.selectedIndex];
 
@@ -296,20 +359,20 @@
             var priceInput = select.parentElement.nextElementSibling.querySelector('.price');
             priceInput.value = productPrice || '';
 
-            // updateArrayPrice();
             updateArrayPrice();
         }
 
-        function removeProduct(index) {
-            var productToRemove = document.querySelector(`#product_${index}`).closest('.mb-3');
-            var nextRow = productToRemove.nextElementSibling;
-            if (nextRow) {
-                nextRow.parentNode.removeChild(nextRow);
-            }
-            productToRemove.parentNode.removeChild(productToRemove);
-
-            // Sau khi xóa sản phẩm, cập nhật lại tổng cộng
+        function removeProduct(button) {
+            // Truy cập đến phần tử cha của nút "Xóa" được click
+            var rowToRemove = button.closest('.row');
+            // Loại bỏ phần tử cha khỏi DOM
+            rowToRemove.parentNode.removeChild(rowToRemove);
+            // Sau khi loại bỏ dòng, cập nhật lại giá trị
+            updateArrayPrice();
+            updateArrayQuantity();
+            updateSubTotal();
             updateTotal();
+            updateProductID();
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -320,7 +383,12 @@
                 if (duplicateProductId) {
                     event.preventDefault();
                     alert(
-                        "Bạn đã chọn cùng một loại suất nhiều lần. Vui lòng chọn những loại suất khác nhau");
+                        "Bạn đã chọn cùng một loại sản phẩm. Vui lòng chọn những loại sản phẩm khác nhau"
+                    );
+                }
+                if (arrayProductId.length === 0) {
+                    event.preventDefault();
+                    alert('Vui lòng thêm ít nhất một sản phẩm.');
                 }
             });
 

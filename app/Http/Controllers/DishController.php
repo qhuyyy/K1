@@ -20,6 +20,17 @@ class DishController extends Controller
         return view('menu.dishes.index', compact('dishes','dishtypes'));
     }
 
+    public function getDishPrice($id)
+    {
+        $dish = Dish::find($id);
+
+        if ($dish) {
+            return response()->json(['price' => $dish->price]);
+        } else {
+            return response()->json(['price' => null]);
+        }
+    }
+    
     public function filterDish(Request $request)
     {
         $query = Dish::query();
@@ -68,7 +79,8 @@ class DishController extends Controller
     {
         $dish = Dish::create([
             'DishName' => $request->input('DishName'),
-            'DishType_ID' => $request->input('dishtype')
+            'DishType_ID' => $request->input('dishtype'),
+            'Price' => $request->input('Price')
         ]);
 
         $ingredients = $request->input('ingredient');
@@ -111,17 +123,12 @@ class DishController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request->validate([
-            'DishName' => 'required|string|max:255',
-            'DishType_ID' => 'required|exists:dish_types,id',
-            'amount' => 'array', // Kiểm tra xem 'amount' có phải là một mảng không
-        ]);
-
         $dish = Dish::findOrFail($id);
 
         $dish->update([
             'DishName' => $request->input('DishName'),
             'DishType_ID' => $request->input('DishType_ID'),
+            'Price' => $request->input('Price')
         ]);
 
         // Lưu giá trị Amount tương ứng vào bảng trung gian dish_ingredients

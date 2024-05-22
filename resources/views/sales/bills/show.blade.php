@@ -22,19 +22,11 @@
                     </div>
                     @foreach ($bill->products as $index => $product)
                         <div class="mb-3 border border-2 border-dark pb-2">
-                            @if ($product->product_type->ProductTypeName == 'Cơm suất')
-                                <div class="h5">Cơm suất</div>
-                            @elseif ($product->product_type->ProductTypeName == 'Đồ ăn nhanh')
-                                <div class="h5">Đồ ăn nhanh</div>
-                            @endif
+                            <div class="h5">Danh sách các sản phẩm</div>
                             <div class="row">
                                 <div class="col-md-3">
-                                    <label for="product{{ $index }}" class="form-label">
-                                        @if ($product->product_type->ProductTypeName == 'Cơm suất')
-                                            Loại suất
-                                        @elseif ($product->product_type->ProductTypeName == 'Đồ ăn nhanh')
-                                            Tên món
-                                        @endif
+                                    <label for="product{{ $index }}" class="form-label" data-product-type="{{ $product->product_type->ProductTypeName }}">
+                                        {{ $product->product_type->ProductTypeName }}
                                     </label>
                                     <input type="text" readonly class="form-control" id="product{{ $index }}"
                                         value="{{ $product->ProductName }}" readonly>
@@ -59,6 +51,11 @@
                             </div>
                         </div>
                     @endforeach
+                    <div class="mb-3">
+                        <label for="formGroupExampleInput" class="form-label">Gọi thêm đồ</label>
+                        <input type="text" readonly class="form-control" id="formGroupExampleInput" name="Extra"
+                            value="{{ $bill->Extra }}">
+                    </div>
                     <div class="mb-3">
                         <label for="formGroupExampleInput" class="form-label">Tổng cộng</label>
                         <input type="text" readonly class="form-control" id="formGroupExampleInput" name="Total"

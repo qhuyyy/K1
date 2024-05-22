@@ -11,6 +11,7 @@ class Dish extends Model
     protected $fillable = [
         'DishName',
         'DishType_ID', 
+        'Price'
     ];
     public $timestamps = true;
     public function dish_type()
@@ -20,5 +21,11 @@ class Dish extends Model
     public function ingredients()
     {
         return $this->belongsToMany(Ingredient::class, 'dish_ingredients', 'Dish_ID', 'Ingredient_ID')->withPivot('Amount');
+    }
+    public function tables()
+    {
+        return $this->belongsToMany(Table::class, 'table_dishes', 'Dish_ID', 'Table_ID')
+                    ->withPivot('NumberOfDishes')
+                    ->withTimestamps();
     }
 }

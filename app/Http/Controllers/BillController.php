@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Bill;
 use App\Models\Product;
 use App\Models\ProductType;
+use App\Models\Menu;
+use App\Models\Dishes;
 
 class BillController extends Controller
 {
@@ -46,16 +48,18 @@ class BillController extends Controller
     {
         $producttypes = ProductType::all();
         $products = Product::with('product_type')->get();
+        $menus = Menu::with('dishes')->get();
 
-        return view('sales.bills.create',compact('producttypes','products'));
+        return view('sales.bills.create',compact('producttypes','products','menus'));
     }
 
     public function createWithoutParams()
     {
         $producttypes = ProductType::all();
         $products = Product::with('product_type')->get();
-        
-        return view('sales.bills.create', compact('producttypes', 'products'));
+        $menus = Menu::with('dishes')->get();
+
+        return view('sales.bills.create', compact('producttypes', 'products','menus'));
     }
     /**
      * Store a newly created resource in storage.
@@ -64,6 +68,7 @@ class BillController extends Controller
     {
         $bill = new Bill();
         $bill->Date = $request->input('Date');
+        $bill->Extra = $request->input('Extra');
         $bill->Total = $request->input('Total');
 
         $bill->save();
@@ -111,7 +116,7 @@ class BillController extends Controller
     {
         $bill = Bill::findOrFail($id);
 
-        $bill->fill($request->only(['Date', 'Total']));
+        $bill->fill($request->only(['Date', 'Extra' ,'Total']));
         $bill->save();
 
         if ($request->has('products')) {

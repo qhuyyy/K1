@@ -15,8 +15,8 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('producttypes.index') }}">Quản lý loại sản phẩm</a>
                 </li>
-            </ul>    
-        </div> 
+            </ul>
+        </div>
         <div class="container">
             <div class="text-center pb-2">
                 <h2>Doanh thu bán hàng</h2>
@@ -41,7 +41,8 @@
                     @foreach ($products as $index => $product)
                         @if ($product->product_type->ProductTypeName == 'Cơm suất')
                             <div class="col-md-3">
-                                <label for="product-type-{{ $index + 1 }}" class="form-label h5">{{ $product->ProductName }}</label>
+                                <label for="product-type-{{ $index + 1 }}"
+                                    class="form-label h5">{{ $product->ProductName }}</label>
                                 <input type="text" class="form-control" id="product-type-{{ $index + 1 }}"
                                     name="product-type-{{ $index + 1 }}" readonly placeholder="0">
                             </div>
@@ -135,13 +136,17 @@
                 for (let i = 0; i < bills.length; i++) {
                     var bill = bills[i];
                     for (let j = 0; j < bill.products.length; j++) {
-                        var productName = bill.products[j].ProductName;
-                        var quantity = bill.products[j].pivot.Quantity;
-                        // Nếu loại suất đã tồn tại, cộng thêm vào số lượng hiện có, nếu không, khởi tạo số lượng mới
-                        if (productQuantities.hasOwnProperty(productName)) {
-                            productQuantities[productName] += quantity;
-                        } else {
-                            productQuantities[productName] = quantity;
+                        var product = bill.products[j];
+                        // Kiểm tra xem producttypeid của sản phẩm có bằng 1 hay không
+                        if (product.ProductType_ID === 1) {
+                            var productName = product.ProductName;
+                            var quantity = product.pivot.Quantity;
+                            // Nếu loại suất đã tồn tại, cộng thêm vào số lượng hiện có, nếu không, khởi tạo số lượng mới
+                            if (productQuantities.hasOwnProperty(productName)) {
+                                productQuantities[productName] += quantity;
+                            } else {
+                                productQuantities[productName] = quantity;
+                            }
                         }
                     }
                 }
@@ -187,16 +192,16 @@
                         }
                         productsHtml += '</ul>';
                         html += '<tr>\
-                                <td>' + bill.id + '</td>\
-                                <td>' + bill.Date + '</td>\
-                                <td>' + productsHtml + '</td>\
-                                <td>' + bill.Total + '</td>\
-                                <td>\
-                                    <a href="/bills/' + bill.id + '"><img src="{{ URL('images/ShowIcon.svg') }}" alt="Show Icon"></a>\
-                                    <a href="/bills/' + bill.id + '/edit"><img src="{{ URL('images/EditIcon.svg') }}" alt="Edit Icon"></a>\
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal' + bill.id + '"><img src="{{ URL('images/DeleteIcon.svg') }}" alt="Delete Icon"></a>\
-                                </td>\
-                            </tr>';
+                                    <td>' + bill.id + '</td>\
+                                    <td>' + bill.Date + '</td>\
+                                    <td>' + productsHtml + '</td>\
+                                    <td>' + bill.Total + '</td>\
+                                    <td>\
+                                        <a href="/bills/' + bill.id + '"><img src="{{ URL('images/ShowIcon.svg') }}" alt="Show Icon"></a>\
+                                        <a href="/bills/' + bill.id + '/edit"><img src="{{ URL('images/EditIcon.svg') }}" alt="Edit Icon"></a>\
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal' + bill.id + '"><img src="{{ URL('images/DeleteIcon.svg') }}" alt="Delete Icon"></a>\
+                                    </td>\
+                                </tr>';
                     }
                     $("#t-body").html(html);
                 }
@@ -242,16 +247,16 @@
                             }
                             productsHtml += '</ul>';
                             html += '<tr>\
-                                    <td>' + bill.id + '</td>\
-                                    <td>' + bill.Date + '</td>\
-                                    <td>' + productsHtml + '</td>\
-                                    <td>' + bill.Total + '</td>\
-                                    <td>\
-                                        <a href="/bills/' + bill.id + '"><img src="{{ URL('images/ShowIcon.svg') }}" alt="Show Icon"></a>\
-                                        <a href="/bills/' + bill.id + '/edit"><img src="{{ URL('images/EditIcon.svg') }}" alt="Edit Icon"></a>\
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal' + bill.id + '"><img src="{{ URL('images/DeleteIcon.svg') }}" alt="Delete Icon"></a>\
-                                    </td>\
-                                </tr>';
+                                        <td>' + bill.id + '</td>\
+                                        <td>' + bill.Date + '</td>\
+                                        <td>' + productsHtml + '</td>\
+                                        <td>' + bill.Total + '</td>\
+                                        <td>\
+                                            <a href="/bills/' + bill.id + '"><img src="{{ URL('images/ShowIcon.svg') }}" alt="Show Icon"></a>\
+                                            <a href="/bills/' + bill.id + '/edit"><img src="{{ URL('images/EditIcon.svg') }}" alt="Edit Icon"></a>\
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal' + bill.id + '"><img src="{{ URL('images/DeleteIcon.svg') }}" alt="Delete Icon"></a>\
+                                        </td>\
+                                    </tr>';
                         }
                         $("#t-body").html(html);
                     }

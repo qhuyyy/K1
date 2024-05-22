@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dishes', function (Blueprint $table) {
+        Schema::create('tables', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('DishType_ID');
-            $table->foreign('DishType_ID')->references('id')->on('dish_types')->onDelete('cascade');
-            $table->string('DishName',50)->unique();
-            $table->integer('Price');
+            $table->unsignedBigInteger('Bill_ID');
+            $table->foreign('Bill_ID')->references('id')->on('bills')->onDelete('cascade');
+            $table->integer('NumberOfTables');
+            $table->integer('SubTotal');
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dishes');
+        Schema::dropIfExists('tables');
     }
 };

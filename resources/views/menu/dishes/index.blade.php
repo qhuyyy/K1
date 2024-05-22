@@ -44,6 +44,7 @@
                         <th scope="col">Tên món ăn</th>
                         <th scope="col">Loại món ăn</th>
                         <th scope="col">Danh sách nguyên liệu</th>
+                        <th scope="col">Đơn giá</th>
                         <th scope="col">Hành động</th>
                     </tr>
                 </thead>
@@ -60,6 +61,7 @@
                                     @endforeach
                                 </ul>       
                             </td>
+                            <td>{{ $dish->Price }}</td>
                             <td>
                                 <div>
                                     <a href="{{ route('dishes.show', $dish->id) }}"><img src="{{ URL('images/ShowIcon.svg') }}"
@@ -128,6 +130,7 @@
                                             <td>' + dishes[i]['DishName'] + '</td>\
                                             <td>' + (dishes[i]['dish_type'] ? dishes[i]['dish_type']['DishTypeName'] : '') + '</td>\
                                             <td>' + ingredientsHtml + '</td>\
+                                            <td>' + dishes[i]['Price'] + '</td>\
                                             <td>\
                                                 <div class="mx-3">\
                                                     <a href="/dishes/' + dishes[i]['id'] + '"><img src="{{ URL('images/ShowIcon.svg') }}" alt="Show Icon"></a>\

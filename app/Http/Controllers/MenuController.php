@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Menu;
+use App\Models\MenuDish;
 use App\Models\Dish;
 use App\Models\Ingredient;
 
@@ -37,6 +38,28 @@ class MenuController extends Controller
 
         $menus = $query->get();
         return view('menu.menus.index', compact('menus', 'dates'));
+    }
+
+    public function getMenuIdByDate(Request $request)
+    {
+        // Lấy tham số 'date' từ query string
+        $date = $request->query('date');
+
+        // Tìm kiếm bản ghi có trường Date khớp với giá trị nhận được
+        $menu = Menu::where('Date', $date)->first();
+
+        if ($menu) {
+            // Lấy danh sách các dish_id tương ứng với menu_id
+            $dishesIds = MenuDish::where('Menu_ID', $menu->id)->pluck('Dish_ID')->toArray();
+            
+            // Lấy thông tin chi tiết của các món ăn từ bảng dishes
+            $dishes = Dish::whereIn('id', $dishesIds)->select('id', 'DishName', 'Price')->get()->toArray();
+
+            // Trả về danh sách các DishName
+            return response()->json(['menu_id' => $menu->id, 'dishes' => $dishes]);
+        } else {
+            return response()->json(['menu_id' => '', 'dishes' => []]);
+        }
     }
     /**
      * Show the form for creating a new resource.

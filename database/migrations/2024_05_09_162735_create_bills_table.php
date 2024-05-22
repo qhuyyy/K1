@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
             $table->date('Date');
+            $table->integer('Extra')->nullable();
             $table->integer('Total');
             $table->timestamps();
         });

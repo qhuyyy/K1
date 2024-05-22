@@ -47,3 +47,6 @@ Route::get('bills/create/{date}', [BillController::class, 'create'])->name('bill
 
 Route::resource('products',ProductController::class);
 Route::resource('producttypes',ProductTypeController::class);
+
+Route::get('/getMenuIdByDate', [MenuController::class, 'getMenuIdByDate'])->name('getMenuIdByDate');
+

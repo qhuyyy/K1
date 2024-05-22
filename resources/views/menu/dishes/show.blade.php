@@ -26,7 +26,13 @@
                             value="{{ $dish->dish_type->DishTypeName }}">
                     </div>
                     <div class="mb-3">
-                        <div class="row">
+                        <label for="formGroupExampleInput2" class="form-label">Đơn giá</label>
+                        <input type="text" readonly class="form-control" id="formGroupExampleInput2"
+                            value="{{ $dish->Price }}">
+                    </div>
+                    <div id="ingredients-container" class="border border-2 border-dark mb-3">
+                        <div class="h5">Danh sách các nguyên liệu</div>
+                        <div class="row mb-3">
                             @foreach ($dish->ingredients as $ingredient)
                                 <div class="col-md-7">
                                     <label class="form-label">Nguyên liệu</label>
@@ -38,7 +44,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <label for="unit" class="form-label">Đơn vị tính</label>
-                                    <input class="form-control" type="text" id="unit" name="unit" readonly>
+                                    <input class="form-control" type="text" id="unit" name="unit" value="{{ $ingredient->unit->UnitName }}" readonly>
                                 </div>
                             @endforeach  
                         </div> 
@@ -60,13 +66,6 @@
                 updateUnit(select);
             });
         });
-
-        function updateUnit(select) {
-            var selectedOption = select.options[select.selectedIndex];
-            var unitName = selectedOption.getAttribute('data-unit-name');
-            var unitInput = select.parentElement.nextElementSibling.nextElementSibling.querySelector('#unit');
-            unitInput.value = unitName || '';
-        } 
     </script>
 @endsection
 
