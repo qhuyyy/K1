@@ -20,22 +20,26 @@
                         </div>
                         <div class="mb-3">
                             <label for="formGroupExampleInput2" class="form-label">Ngày</label>
-                            <input type="date" class="form-control" id="formGroupExampleInput2" name="Date" value="{{ $menu->Date }}" placeholder="Nhập ngày">
+                            <input type="date" class="form-control" id="formGroupExampleInput2" name="Date"
+                                value="{{ $menu->Date }}" placeholder="Nhập ngày">
                         </div>
                         <div class="mb-3">
                             <div class="row">
                                 <div class="col-md-4">
                                     <label for="NumberOfTotalPortions" class="form-label">Số lượng suất ăn dự kiến</label>
                                     <input type="text" class="form-control" id="NumberOfTotalPortions"
-                                        name="NumberOfTotalPortions" value="{{ $menu->NumberOfTotalPortions }}" placeholder="Nhập số lượng suất ăn">
+                                        name="NumberOfTotalPortions" value="{{ $menu->NumberOfTotalPortions }}"
+                                        placeholder="Nhập số lượng suất ăn">
                                 </div>
                                 <div class="col-md-4">
                                     <label for="TotalFoodCost" class="form-label">Tổng số tiền mua thực phẩm tối đa </label>
                                     <input type="text" class="form-control" id="TotalFoodCost" name="TotalFoodCost"
-                                        value="{{ number_format($menu->NumberOfTotalPortions * 25000 * 0.4, 0, ',', '.') }}" placeholder="Nhập số lượng suất ăn" readonly>
+                                        value="{{ number_format($menu->NumberOfTotalPortions * 25000 * 0.4, 0, ',', '.') }}"
+                                        placeholder="Nhập số lượng suất ăn" readonly>
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="totalFoodPurchase" class="form-label">Tổng số tiền mua thực phẩm hiện tại</label>
+                                    <label for="totalFoodPurchase" class="form-label">Tổng số tiền mua thực phẩm hiện
+                                        tại</label>
                                     <input type="text" class="form-control" id="totalFoodPurchase" readonly>
                                 </div>
                             </div>
@@ -47,64 +51,96 @@
                                         <div class="col-md-11">
                                             <div class="row mb-3">
                                                 <div class="col-md-5">
-                                                    <label for="dish_{{ $index }}" class="form-label h5">Món ăn</label>
-                                                    <select class="form-select" id="dish_{{ $index }}" name="dishes[{{ $index }}][id]" onchange="getIngredients({{ $index }})">
+                                                    <label for="dish_{{ $index }}" class="form-label h5">Món
+                                                        ăn</label>
+                                                    <select class="form-select" id="dish_{{ $index }}"
+                                                        name="dishes[{{ $index }}][id]"
+                                                        onchange="getIngredients({{ $index }})">
                                                         <option value="">- Chọn món ăn -</option>
                                                         @foreach ($dishes as $dishOption)
-                                                            <option value="{{ $dishOption->id }}" @if ($dish->id == $dishOption->id) selected @endif>{{ $dishOption->DishName }}</option>
+                                                            <option value="{{ $dishOption->id }}"
+                                                                @if ($dish->id == $dishOption->id) selected @endif>
+                                                                {{ $dishOption->DishName }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="col-md-2">
-                                                    <label for="numberofportions_{{ $index }}" class="form-label">Số lượng suất</label>
-                                                    <input class="form-control soluong" type="text" name="dishes[{{ $index }}][numberOfPortions]" id="numberofportions_{{ $index }}" value="{{ $dish->pivot->NumberOfPortions }}" onchange="updateSoLuong()">
+                                                    <label for="numberofportions_{{ $index }}" class="form-label">Số
+                                                        lượng suất</label>
+                                                    <input class="form-control soluong" type="text"
+                                                        name="dishes[{{ $index }}][numberOfPortions]"
+                                                        id="numberofportions_{{ $index }}"
+                                                        value="{{ $dish->pivot->NumberOfPortions }}"
+                                                        onchange="updateSoLuong()">
                                                 </div>
                                                 @php
                                                     $totalEstimatedValue = 0;
                                                     foreach ($dish->ingredients as $ingredient) {
-                                                        $totalEstimatedValue += $ingredient->Price * $ingredient->pivot->Amount;
+                                                        $totalEstimatedValue +=
+                                                            $ingredient->Price * $ingredient->pivot->Amount;
                                                     }
-                                                    $totalPrice = $totalEstimatedValue * $dish->pivot->NumberOfPortions / 10;
+                                                    $totalPrice =
+                                                        ($totalEstimatedValue * $dish->pivot->NumberOfPortions) / 10;
                                                 @endphp
                                                 <div class="col-md-2">
-                                                    <label for="price_{{ $index }}" class="form-label">Giá trị ước tính</label>
-                                                    <input class="form-control giatriuoctinh" type="text" id="price_{{ $index }}" name="dishes[{{ $index }}][price]" value="{{ $totalEstimatedValue }}" readonly>
+                                                    <label for="price_{{ $index }}" class="form-label">Giá trị ước
+                                                        tính</label>
+                                                    <input class="form-control giatriuoctinh" type="text"
+                                                        id="price_{{ $index }}"
+                                                        name="dishes[{{ $index }}][price]"
+                                                        value="{{ $totalEstimatedValue }}" readonly>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <label for="totalEstimatedValue_{{ $index }}" class="form-label">Tổng tiền </label>
-                                                    <input class="form-control ketqua" type="text" id="totalEstimatedValue_{{ $index }}" name="dishes[{{ $index }}][totalEstimatedValue]" value="{{ $totalPrice }}" readonly>
+                                                    <label for="totalEstimatedValue_{{ $index }}"
+                                                        class="form-label">Tổng tiền </label>
+                                                    <input class="form-control ketqua" type="text"
+                                                        id="totalEstimatedValue_{{ $index }}"
+                                                        name="dishes[{{ $index }}][totalEstimatedValue]"
+                                                        value="{{ $totalPrice }}" readonly>
                                                 </div>
                                             </div>
                                             <div id="ingredient-list_{{ $index }}">
                                                 @foreach ($dish->ingredients as $ingredient)
                                                     <div class="row mb-3">
                                                         <div class="col-md-4">
-                                                            <label for="ingredient-list" class="form-label">Nguyên liệu tương ứng</label>
-                                                            <input class="form-control" type="text" value="{{ $ingredient->IngredientName }}" readonly>
+                                                            <label for="ingredient-list" class="form-label">Nguyên liệu
+                                                                tương ứng</label>
+                                                            <input class="form-control" type="text"
+                                                                value="{{ $ingredient->IngredientName }}" readonly>
                                                         </div>
                                                         <div class="col-md-3">
-                                                            <label for="ingredient-list" class="form-label">Đơn giá</label>
-                                                            <input class="form-control" type="text" value="{{ $ingredient->Price }}" readonly>
+                                                            <label for="ingredient-list" class="form-label">Đơn
+                                                                giá</label>
+                                                            <input class="form-control" type="text"
+                                                                value="{{ $ingredient->Price }}" readonly>
                                                         </div>
                                                         <div class="col-md-3">
-                                                            <label for="ingredient-list" class="form-label">Định lượng cho 10 suất</label>
-                                                            <input class="form-control" type="text" value="{{ $ingredient->pivot->Amount !== null ? $ingredient->pivot->Amount : 0 }}" readonly>
+                                                            <label for="ingredient-list" class="form-label">Định lượng cho
+                                                                10 suất</label>
+                                                            <input class="form-control" type="text"
+                                                                value="{{ $ingredient->pivot->Amount !== null ? $ingredient->pivot->Amount : 0 }}"
+                                                                readonly>
                                                         </div>
                                                         <div class="col-md-2">
-                                                            <label for="ingredient-list" class="form-label">Tổng cộng</label>
-                                                            <input class="form-control" type="text" value="{{ $ingredient->Price * $ingredient->pivot->Amount }}" readonly>
+                                                            <label for="ingredient-list" class="form-label">Tổng
+                                                                cộng</label>
+                                                            <input class="form-control" type="text"
+                                                                value="{{ $ingredient->Price * $ingredient->pivot->Amount }}"
+                                                                readonly>
                                                         </div>
                                                     </div>
                                                 @endforeach
                                             </div>
                                         </div>
-                                        <div class="col-md-1 d-flex align-items-start justify-content-start" style="margin-top: 2.3rem;">
-                                            <button type="button" class="btn btn-danger" onclick="removeDish({{ $index }})">Xóa</button>
+                                        <div class="col-md-1 d-flex align-items-start justify-content-start"
+                                            style="margin-top: 2.3rem;">
+                                            <button type="button" class="btn btn-danger"
+                                                onclick="removeDish({{ $index }})">Xóa</button>
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
-                        </div>                       
+                        </div>
                         <div class="row d-flex justify-content-center align-items-center pt-2 text-center">
                             <div class="col-md-3">
                                 <button type="button" id="add-dish" class="btn btn-info">Thêm món</button>
@@ -131,14 +167,16 @@
         let valueTotal = 0;
 
         let arrayUocTinh = [];
-        function updateArray(){
+
+        function updateArray() {
             arrayUocTinh = [];
-            document.querySelectorAll('.giatriuoctinh').forEach((item)=>{
+            document.querySelectorAll('.giatriuoctinh').forEach((item) => {
                 arrayUocTinh.push(item.value);
             })
         }
 
         let arraySoLuong = [];
+
         function updateSoLuong() {
             valueTotal = 0;
             arraySoLuong = [];
@@ -146,8 +184,8 @@
                 arraySoLuong.push(item.value);
             });
             updateArray();
-            console.log('GiaTriUocTinh',arrayUocTinh);
-            console.log('SoLuong',arraySoLuong);
+            console.log('GiaTriUocTinh', arrayUocTinh);
+            console.log('SoLuong', arraySoLuong);
             const arrayTotal = arrayUocTinh.map((value, index) => Number(value) / 10 * Number(arraySoLuong[index]));
             document.querySelectorAll('.ketqua').forEach((item, i) => {
                 item.value = !isNaN(arrayTotal[i]) ? arrayTotal[i] : '';
@@ -166,7 +204,8 @@
         function updateTotalFoodPurchase() {
             let totalFoodPurchase = 0;
             document.querySelectorAll('.ketqua').forEach((item) => {
-                const value = parseFloat(item.value.replace(/\D/g, '')); // Lấy giá trị từ input và chuyển đổi sang số
+                const value = parseFloat(item.value.replace(/\D/g,
+                '')); // Lấy giá trị từ input và chuyển đổi sang số
                 if (!isNaN(value)) {
                     totalFoodPurchase += value; // Tính tổng số tiền
                 }
@@ -178,7 +217,7 @@
             });
         }
 
-        
+
         var dishes = {!! json_encode($dishes) !!};
         var ingredients = {!! json_encode($ingredients) !!};
 
@@ -197,7 +236,7 @@
                 totalFoodCostInput.value = '';
             }
         });
-    
+
         document.addEventListener("DOMContentLoaded", function() {
             var totalFoodCostInput = document.getElementById('TotalFoodCost');
             var totalFoodCost = parseFloat(totalFoodCostInput.value.replace(/\D/g, ''));
@@ -208,7 +247,7 @@
             });
             updateTotalFoodPurchase();
 
-            
+
         });
 
         document.getElementById('add-dish').addEventListener('click', function() {
@@ -254,10 +293,10 @@
 
             container.appendChild(div);
             createNewIngredientList(index);
-            
+
             updateArray();
-        });         
-        
+        });
+
 
         function removeDish(index) {
             var dishToRemove = document.getElementById('dish_' + index).closest('.mb-3');

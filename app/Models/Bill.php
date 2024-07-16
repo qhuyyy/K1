@@ -9,14 +9,23 @@ class Bill extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'Date', 'Extra' ,'Total'
+        'Date', 'Extra', 'Prepaid' ,'Total'
     ];
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'bill_products', 'Bill_ID', 'Product_ID')->withPivot('Quantity','SubTotal');
+        return $this->belongsToMany(Product::class, 'bill_products', 'Bill_ID', 'Product_ID')
+                    ->withPivot('Quantity','SubTotal');
     }
     public function tables()
     {
         return $this->hasMany(Table::class, 'Bill_ID');
+    }
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'Customer_ID');
+    }
+    public function bill_type()
+    {
+        return $this->belongsTo(BillType::class, 'BillType_ID');
     }
 }

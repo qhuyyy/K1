@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tables', function (Blueprint $table) {
+        Schema::create('bill_types', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('Bill_ID');
-            $table->foreign('Bill_ID')->references('id')->on('bills')->onDelete('cascade');
-            $table->integer('NumberOfTables');
+            $table->string('BillTypeName',50);
             $table->timestamps();
         });
     }
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tables');
+        Schema::dropIfExists('bill_types');
     }
 };

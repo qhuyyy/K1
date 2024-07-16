@@ -19,7 +19,7 @@
         </div>
         <div class="container">
             <div class="text-center pb-2">
-                <h2>Doanh thu bán hàng</h2>
+                <h2>Danh sách đơn bán hàng</h2>
             </div>
             <div class="container">
                 <div class="row mb-3">
@@ -41,10 +41,11 @@
                     @foreach ($products as $index => $product)
                         @if ($product->product_type->ProductTypeName == 'Cơm suất')
                             <div class="col-md-3">
-                                <label for="product-type-{{ $index + 1 }}"
+                                <label for="product-type-{{ $product->id }}"
                                     class="form-label h5">{{ $product->ProductName }}</label>
-                                <input type="text" class="form-control" id="product-type-{{ $index + 1 }}"
-                                    name="product-type-{{ $index + 1 }}" readonly placeholder="0">
+                                <input type="text" class="form-control product-type-input"
+                                    id="product-type-{{ $product->id }}" data-product-name="{{ $product->ProductName }}"
+                                    name="product-type-{{ $product->id }}" readonly placeholder="0">
                             </div>
                         @endif
                     @endforeach
@@ -68,9 +69,15 @@
                                 <td>{{ $bill->Date }}</td>
                                 <td>
                                     <ul>
-                                        @foreach ($bill->products as $product)
-                                            <li>{{ $product->ProductName }} - {{ $product->pivot->Quantity }}</li>
-                                        @endforeach
+                                        @if ($bill->products->isNotEmpty())
+                                            @foreach ($bill->products as $product)
+                                                <li>{{ $product->ProductName }} - {{ $product->pivot->Quantity }}</li>
+                                            @endforeach
+                                        @elseif ($bill->tables)
+                                            @foreach ($bill->tables as $table)
+                                                <li>Mâm - {{ $table->NumberOfTables }}</li>
+                                            @endforeach
+                                        @endif
                                     </ul>
                                 </td>
                                 <td>{{ $bill->Total }}</td>
@@ -115,8 +122,9 @@
                 </table>
             </div>
             <div class="container text-center d-flex justify-content-center">
-                <a href="#" id="add-bill-link" class="btn btn-warning">Thêm đơn mới</a>
+                <a href="#" id="add-bill-link" class="btn btn-warning">Thêm đơn sản phẩm mới</a>
             </div>
+
         </div>
     </section>
 @endsection
@@ -128,20 +136,16 @@
                 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
 
-            // Hàm cập nhật số lượng loại suất
             function updateProductQuantities(bills) {
                 var productQuantities = {};
 
-                // Tính tổng doanh thu và thống kê số lượng từng loại suất
                 for (let i = 0; i < bills.length; i++) {
                     var bill = bills[i];
                     for (let j = 0; j < bill.products.length; j++) {
                         var product = bill.products[j];
-                        // Kiểm tra xem producttypeid của sản phẩm có bằng 1 hay không
                         if (product.ProductType_ID === 1) {
                             var productName = product.ProductName;
                             var quantity = product.pivot.Quantity;
-                            // Nếu loại suất đã tồn tại, cộng thêm vào số lượng hiện có, nếu không, khởi tạo số lượng mới
                             if (productQuantities.hasOwnProperty(productName)) {
                                 productQuantities[productName] += quantity;
                             } else {
@@ -151,17 +155,13 @@
                     }
                 }
 
-                // Cập nhật giá trị của các input loại suất
-                var inputCount = 0;
-                for (const [productName, quantity] of Object.entries(productQuantities)) {
-                    inputCount++;
-                    if (inputCount <= 3) {
-                        $("#product-type-" + inputCount).val(quantity);
-                    }
-                }
+                $(".product-type-input").each(function() {
+                    var productName = $(this).data("product-name");
+                    var quantity = productQuantities[productName] || 0;
+                    $(this).val(quantity);
+                });
             }
 
-            // Tính tổng doanh thu và cập nhật số lượng loại suất khi trang được khởi tạo
             $.ajax({
                 url: "{{ route('filter.bills') }}",
                 type: "GET",
@@ -169,26 +169,29 @@
                     var bills = data.bills;
                     var totalRevenue = 0;
 
-                    // Tính tổng doanh thu từ các hóa đơn
                     for (let i = 0; i < bills.length; i++) {
                         var bill = bills[i];
                         totalRevenue += parseFloat(bill.Total);
                     }
 
-                    // Cập nhật tổng doanh thu
                     $("input[name='total-revenue']").val(numberWithCommas(Math.round(totalRevenue)));
 
-                    // Cập nhật số lượng loại suất
                     updateProductQuantities(bills);
 
-                    // Cập nhật các hóa đơn vào tbody
                     var html = '';
                     for (let i = 0; i < bills.length; i++) {
                         var bill = bills[i];
                         var productsHtml = '<ul>';
-                        for (let j = 0; j < bill.products.length; j++) {
-                            productsHtml += '<li>' + bill.products[j].ProductName +
-                                ' - ' + bill.products[j].pivot.Quantity + '</li>';
+                        if (bill.products.length > 0) {
+                            for (let j = 0; j < bill.products.length; j++) {
+                                productsHtml += '<li>' + bill.products[j].ProductName + ' - ' + bill
+                                    .products[j].pivot.Quantity + '</li>';
+                            }
+                        }
+                        if (bill.tables.length > 0) {
+                            for (let k = 0; k < bill.tables.length; k++) {
+                                productsHtml += '<li>Mâm - ' + bill.tables[k].NumberOfTables + '</li>';
+                            }
                         }
                         productsHtml += '</ul>';
                         html += '<tr>\
@@ -207,7 +210,6 @@
                 }
             });
 
-            // Xử lý sự kiện khi người dùng thay đổi ngày
             $("#date").on('change', function() {
                 var date = $(this).val();
                 $.ajax({
@@ -220,30 +222,32 @@
                         var bills = data.bills;
                         var totalRevenue = 0;
 
-                        // Tính tổng doanh thu từ các hóa đơn
                         for (let i = 0; i < bills.length; i++) {
                             var bill = bills[i];
                             totalRevenue += parseFloat(bill.Total);
                         }
 
-                        // Cập nhật tổng doanh thu
                         $("input[name='total-revenue']").val(numberWithCommas(Math.round(
                             totalRevenue)));
-
-                        // Xóa giá trị cũ trong input hiển thị thống kê số lượng suất
                         $("input[name^='product-type-']").val('');
 
-                        // Cập nhật số lượng loại suất
                         updateProductQuantities(bills);
 
-                        // Cập nhật các hóa đơn vào tbody
                         var html = '';
                         for (let i = 0; i < bills.length; i++) {
                             var bill = bills[i];
                             var productsHtml = '<ul>';
-                            for (let j = 0; j < bill.products.length; j++) {
-                                productsHtml += '<li>' + bill.products[j].ProductName +
-                                    ' - ' + bill.products[j].pivot.Quantity + '</li>';
+                            if (bill.products.length > 0) {
+                                for (let j = 0; j < bill.products.length; j++) {
+                                    productsHtml += '<li>' + bill.products[j].ProductName +
+                                        ' - ' + bill.products[j].pivot.Quantity + '</li>';
+                                }
+                            }
+                            if (bill.tables.length > 0) {
+                                for (let k = 0; k < bill.tables.length; k++) {
+                                    productsHtml += '<li>Mâm - ' + bill.tables[k]
+                                        .NumberOfTables + '</li>';
+                                }
                             }
                             productsHtml += '</ul>';
                             html += '<tr>\
@@ -263,7 +267,6 @@
                 });
             });
 
-            // Xử lý sự kiện khi người dùng nhấn vào link "Thêm mới đơn cơm suất"
             document.getElementById('add-bill-link').addEventListener('click', function() {
                 var date = document.getElementById('date').value;
 
@@ -275,6 +278,7 @@
                     window.location.href = url;
                 }
             });
+
         });
     </script>
 @endsection

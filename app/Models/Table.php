@@ -9,7 +9,7 @@ class Table extends Model
 {
     use HasFactory;
     protected $table = 'tables';
-
+    protected $fillable = ['NumberOfTables'];
     public function bill()
     {
         return $this->belongsTo(Bill::class, 'Bill_ID');
@@ -18,7 +18,7 @@ class Table extends Model
     public function dishes()
     {
         return $this->belongsToMany(Dish::class, 'table_dishes', 'Table_ID', 'Dish_ID')
-                    ->withPivot('NumberOfDishes') // if you have additional fields in the pivot table
+                    ->withPivot('NumberOfDishes') 
                     ->withTimestamps();
     }
 }

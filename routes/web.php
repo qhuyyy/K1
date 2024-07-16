@@ -45,8 +45,17 @@ Route::get('/filter-bills', [BillController::class, 'filterBill'])->name('filter
 Route::get('bills/create', [BillController::class, 'createWithoutParams'])->name('bills.createWithoutParams');
 Route::get('bills/create/{date}', [BillController::class, 'create'])->name('bills.create');
 
-Route::resource('products',ProductController::class);
-Route::resource('producttypes',ProductTypeController::class);
+Route::get('/sales/bills/create2', function(){
+    return view('sales.bills.create2');
+});
 
 Route::get('/getMenuIdByDate', [MenuController::class, 'getMenuIdByDate'])->name('getMenuIdByDate');
 
+Route::resource('products',ProductController::class);
+Route::resource('producttypes',ProductTypeController::class);
+
+
+Route::post('/save-products', [BillController::class, 'saveProducts'])->name('save.products');
+Route::post('/save-tables', [BillController::class, 'saveTables'])->name('save.tables');
+Route::put('/bills/{bill}/update-products', [BillController::class, 'updateProducts'])->name('bills.updateProducts');
+Route::put('/bills/{bill}/update-tables', [BillController::class, 'updateTables'])->name('bills.updateTables');
